@@ -1,0 +1,48 @@
+<Language Name="Italian" IsDefault="false" IsRightToLeft="false">
+
+    <LocaleResource Name="Plugins.FriendlyName.Smartstore.PagOnline" AppendRootKey="false">
+        <Value>PagOnline</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.Smartstore.PagOnline" AppendRootKey="false">
+        <Value>Metodo di pagamento online fornito da Unicredit.</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.FriendlyName.Payments.PagOnline" AppendRootKey="false">
+        <Value>PagOnline</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.Payments.PagOnline" AppendRootKey="false">
+        <Value>Metodo di pagamento online fornito da Unicredit.</Value>
+    </LocaleResource>
+
+    <LocaleResource Name="Plugins.Smartstore.PagOnline" AppendRootKey="false">
+        <Children>
+            <LocaleResource Name="Tid">
+                <Value>TID</Value>
+            </LocaleResource>
+            <LocaleResource Name="Tid.Hint">
+                <Value>Il terminal identifier fornito da Unicredit.</Value>
+            </LocaleResource>
+            <LocaleResource Name="KSig">
+                <Value>KSig</Value>
+            </LocaleResource>
+            <LocaleResource Name="KSig.Hint">
+                <Value>La chiave di firma fornita da Unicredit.</Value>
+            </LocaleResource>
+            <LocaleResource Name="PaymentInfo">
+                <Value>Dopo aver completato l'ordine verrai indirizzato al sistema di pagamento esterno al sito, per completare l'operazione.</Value>
+            </LocaleResource>
+            <LocaleResource Name="Agreement">
+                <Value>Sono consapevole che i miei dati verranno trasferiti al fornitore di servizi di pagamento durante il processo di pagamento.</Value>
+            </LocaleResource>
+            <LocaleResource Name="Agreement.Message">
+                <Value>Ti preghiamo di accettare che i tuoi dati possano essere trasferiti al fornitore del metodo di pagamento durante il processo di pagamento.</Value>
+            </LocaleResource>
+            <LocaleResource Name="UseSandbox">
+                <Value>Utilizza sandbox</Value>
+            </LocaleResource>
+            <LocaleResource Name="UseSandbox.Hint">
+                <Value>Specifica se il collegamento con il POS virtuale debba essere effettuato sugli ambienti di test o meno.</Value>
+            </LocaleResource>
+        </Children>
+    </LocaleResource>
+
+</Language>

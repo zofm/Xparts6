@@ -1,0 +1,12 @@
+{
+  "$schema": "../module.schema.json",
+  "Group": "Payment",
+  "SystemName": "Smartstore.PagOnline",
+  "FriendlyName": "PagOnline",
+  "Description": "Metodo di pagamento online fornito da Unicredit.",
+  "Version": "6.0.0",
+  "MinAppVersion": "6.3.0",
+  "Author": "Xparts",
+  "Order": 1,
+  "ResourceRootKey": "Plugins.Smartstore.PagOnline"
+}

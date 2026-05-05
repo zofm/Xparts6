@@ -1,0 +1,19 @@
+@{
+    Layout = "";
+}
+
+<div class="media">
+    <div class="media-body">
+        <div>
+            @Html.Raw(T("Plugins.Smartstore.PagOnline.PaymentInfo"))
+        </div>
+        <div class="mt-2">
+            <div class="form-check">
+                <input type="checkbox" id="UseAndAgreeToThirdPartyTerms" name="UseAndAgreeToThirdPartyTerms" class="form-check-input" />
+                <label for="UseAndAgreeToThirdPartyTerms" class="form-check-label">
+                    @Html.Raw(T("Plugins.Smartstore.PagOnline.Agreement"))
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

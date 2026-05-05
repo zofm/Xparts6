@@ -1,0 +1,63 @@
+@model Smartstore.PagOnline.Models.ConfigurationModel
+@{
+    Layout = "_ConfigureProvider";
+}
+
+@await Component.InvokeAsync("StoreScope")
+
+<widget target-zone="admin_button_toolbar_before">
+    <button id="SaveConfigButton" type="submit" name="save" class="btn btn-warning" value="save">
+        <i class="fa fa-check"></i>
+        <span>@T("Admin.Common.Save")</span>
+    </button>
+</widget>
+
+<form asp-action="Configure">
+    <div class="adminContent">
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="Tid" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="Tid" />
+                <span asp-validation-for="Tid"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="Ksig" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="Ksig" />
+                <span asp-validation-for="Ksig"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="UseSandbox" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="UseSandbox" />
+                <span asp-validation-for="UseSandbox"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="AdditionalFee" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="AdditionalFee" />
+                <span asp-validation-for="AdditionalFee"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="AdditionalFeePercentage" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="AdditionalFeePercentage" />
+                <span asp-validation-for="AdditionalFeePercentage"></span>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,48 @@
+<Language Name="English" IsDefault="false" IsRightToLeft="false">
+
+    <LocaleResource Name="Plugins.FriendlyName.Smartstore.PagOnline" AppendRootKey="false">
+        <Value>PagOnline</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.Smartstore.PagOnline" AppendRootKey="false">
+        <Value>Online payment method provided by Unicredit.</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.FriendlyName.Payments.PagOnline" AppendRootKey="false">
+        <Value>PagOnline</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.Payments.PagOnline" AppendRootKey="false">
+        <Value>Online payment method provided by Unicredit.</Value>
+    </LocaleResource>
+
+    <LocaleResource Name="Plugins.Smartstore.PagOnline" AppendRootKey="false">
+        <Children>
+            <LocaleResource Name="Tid">
+                <Value>TID</Value>
+            </LocaleResource>
+            <LocaleResource Name="Tid.Hint">
+                <Value>The terminal identifier provided by Unicredit.</Value>
+            </LocaleResource>
+            <LocaleResource Name="KSig">
+                <Value>KSig</Value>
+            </LocaleResource>
+            <LocaleResource Name="KSig.Hint">
+                <Value>The signature key provided by Unicredit.</Value>
+            </LocaleResource>
+            <LocaleResource Name="PaymentInfo">
+                <Value>After completing the order you will be redirected to an external payment provider, where you can make the payment for your order.</Value>
+            </LocaleResource>
+            <LocaleResource Name="Agreement">
+                <Value>I am aware that my data is transferred to the payment provider during the payment process.</Value>
+            </LocaleResource>
+            <LocaleResource Name="Agreement.Message">
+                <Value>Please agree that your data may be transferred to the payment method provider during this payment process.</Value>
+            </LocaleResource>
+            <LocaleResource Name="UseSandbox">
+                <Value>Use sandbox</Value>
+            </LocaleResource>
+            <LocaleResource Name="UseSandbox.Hint">
+                <Value>Specifies whether the payments are executed in the sandbox of the payment provider.</Value>
+            </LocaleResource>
+        </Children>
+    </LocaleResource>
+
+</Language>
