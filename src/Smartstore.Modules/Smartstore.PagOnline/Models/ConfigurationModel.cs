@@ -1,14 +1,15 @@
 namespace Smartstore.PagOnline.Models
 {
+    [LocalizedDisplay("Plugins.Smartstore.PagOnline.")]
     public class ConfigurationModel : ModelBase
     {
-        [LocalizedDisplay("Plugins.Smartstore.PagOnline.Tid")]
+        [LocalizedDisplay("*Tid")]
         public string Tid { get; set; }
 
-        [LocalizedDisplay("Plugins.Smartstore.PagOnline.KSig")]
+        [LocalizedDisplay("*KSig")]
         public string Ksig { get; set; }
 
-        [LocalizedDisplay("Plugins.Smartstore.PagOnline.UseSandbox")]
+        [LocalizedDisplay("*UseSandbox")]
         public bool UseSandbox { get; set; }
 
         [LocalizedDisplay("Admin.Configuration.Payment.Methods.AdditionalFee")]

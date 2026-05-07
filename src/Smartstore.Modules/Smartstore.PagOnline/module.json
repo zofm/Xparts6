@@ -4,7 +4,7 @@
   "SystemName": "Smartstore.PagOnline",
   "FriendlyName": "PagOnline",
   "Description": "Metodo di pagamento online fornito da Unicredit.",
-  "Version": "6.0.0",
+  "Version": "6.3.0",
   "MinAppVersion": "6.3.0",
   "Author": "Xparts",
   "Order": 1,

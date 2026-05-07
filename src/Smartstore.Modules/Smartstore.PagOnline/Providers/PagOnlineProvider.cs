@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Smartstore.Core.Checkout.Cart;
@@ -10,13 +9,12 @@ using Smartstore.Core.Widgets;
 using Smartstore.Engine.Modularity;
 using Smartstore.Http;
 using Smartstore.PagOnline.Components;
-using Smartstore.PagOnline.Controllers;
 using Smartstore.PagOnline.Services;
 using Smartstore.PagOnline.Settings;
 
 namespace Smartstore.PagOnline.Providers
 {
-    [SystemName("Payments.PagOnline")]
+    [SystemName("Smartstore.PagOnline")]
     [FriendlyName("PagOnline")]
     [Order(1)]
     [PaymentMethod(PaymentMethodType.Redirection)]
@@ -38,7 +36,7 @@ namespace Smartstore.PagOnline.Providers
 
         public ILogger Logger { get; set; } = NullLogger.Instance;
 
-        public static string SystemName => "Payments.PagOnline";
+        public static string SystemName => "Smartstore.PagOnline";
 
         public override bool SupportCapture => true;
         public override bool SupportPartiallyRefund => true;
@@ -47,7 +45,7 @@ namespace Smartstore.PagOnline.Providers
         public override bool RequiresInteraction => false;
 
         public RouteInfo GetConfigurationRoute()
-            => new(nameof(PagOnlineController.Configure), "PagOnline", new { area = "Admin" });
+            => new("Configure", "PagOnlineAdmin", new { area = "Admin" });
 
         public override Widget GetPaymentInfoWidget()
             => new ComponentWidget(typeof(PagOnlinePaymentInfoViewComponent));

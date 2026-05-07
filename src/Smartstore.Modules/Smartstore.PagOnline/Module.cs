@@ -7,7 +7,7 @@ namespace Smartstore.PagOnline
     internal class Module : ModuleBase, IConfigurable
     {
         public RouteInfo GetConfigurationRoute()
-            => new("Configure", "PagOnline", new { area = "Admin" });
+            => new("Configure", "PagOnlineAdmin", new { area = "Admin" });
 
         public override async Task InstallAsync(ModuleInstallationContext context)
         {

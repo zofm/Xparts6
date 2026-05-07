@@ -1,21 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Smartstore.ComponentModel;
 using Smartstore.Core.Checkout.Orders;
 using Smartstore.Core.Checkout.Payment;
 using Smartstore.Core.Data;
-using Smartstore.Core.Security;
 using Smartstore.Core.Stores;
-using Smartstore.PagOnline.Models;
 using Smartstore.PagOnline.Services;
-using Smartstore.PagOnline.Settings;
 using Smartstore.Web.Controllers;
-using Smartstore.Web.Modelling.Settings;
 
 namespace Smartstore.PagOnline.Controllers
 {
-    [Area("Admin")]
     public class PagOnlineController : ModuleController
     {
         private readonly SmartDbContext _db;
@@ -33,27 +26,6 @@ namespace Smartstore.PagOnline.Controllers
             _storeContext = storeContext;
             _pagOnlineService = pagOnlineService;
             _orderProcessingService = orderProcessingService;
-        }
-
-        [LoadSetting, AuthorizeAdmin]
-        public IActionResult Configure(PagOnlineSettings settings)
-        {
-            var model = MiniMapper.Map<PagOnlineSettings, ConfigurationModel>(settings);
-            return View(model);
-        }
-
-        [HttpPost, SaveSetting, AuthorizeAdmin]
-        public IActionResult Configure(PagOnlineSettings settings, ConfigurationModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Configure(settings);
-            }
-
-            ModelState.Clear();
-            MiniMapper.Map(model, settings);
-
-            return RedirectToAction(nameof(Configure));
         }
 
         [HttpGet]
