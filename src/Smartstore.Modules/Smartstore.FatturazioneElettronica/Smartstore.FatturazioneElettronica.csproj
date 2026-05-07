@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <Product>Smartstore Fatturazione Elettronica</Product>
+    <OutputPath>..\..\Smartstore.Web\Modules\Smartstore.FatturazioneElettronica</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Unidecode.NET" Version="2.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.6" />
+    <PackageReference Include="FluentMigrator" Version="8.0.1" />
+    <PackageReference Include="FluentMigrator.Abstractions" Version="8.0.1" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,158 @@
+﻿@using Smartstore.FatturazioneElettronica.Models
+
+@model ConfigurationModel
+@{
+    Layout = "_ConfigureModule";
+}
+
+@await Component.InvokeAsync("StoreScope")
+
+<widget target-zone="admin_button_toolbar_before">
+    <button id="SaveConfigButton" type="submit" name="save" class="btn btn-warning" value="save">
+        <i class="fa fa-check"></i>
+        <span>@T("Admin.Common.Save")</span>
+    </button>
+</widget>
+
+<form asp-action="Configure">
+    <div class="adminContent">
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="AppDataFolder" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="AppDataFolder" />
+                <span asp-validation-for="AppDataFolder"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="ArubaUsername" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="ArubaUsername" />
+                <span asp-validation-for="ArubaUsername"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="ArubaPassword" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="ArubaPassword" />
+                <span asp-validation-for="ArubaPassword"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="ArubaTaxCode" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="ArubaTaxCode" />
+                <span asp-validation-for="ArubaTaxCode"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="UseTestEnvironment" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="UseTestEnvironment" />
+                <span asp-validation-for="UseTestEnvironment"></span>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="EORI" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="EORI" />
+                <span asp-validation-for="EORI"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="CompanyName" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="CompanyName" />
+                <span asp-validation-for="CompanyName"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="Address" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="Address" />
+                <span asp-validation-for="Address"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="AddressNumber" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="AddressNumber" />
+                <span asp-validation-for="AddressNumber"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="City" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="City" />
+                <span asp-validation-for="City"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="Province" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="Province" />
+                <span asp-validation-for="Province"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="Country" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="Country" />
+                <span asp-validation-for="Country"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="ZipCode" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="ZipCode" />
+                <span asp-validation-for="ZipCode"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="TaxCode" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="TaxCode" />
+                <span asp-validation-for="TaxCode"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="VatCode" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="VatCode" />
+                <span asp-validation-for="VatCode"></span>
+            </div>
+        </div>
+    </div>
+</form>

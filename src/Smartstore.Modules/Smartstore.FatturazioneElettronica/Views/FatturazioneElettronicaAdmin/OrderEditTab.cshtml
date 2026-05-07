@@ -1,0 +1,255 @@
+@model Smartstore.FatturazioneElettronica.Models.OrderEditTabModel
+@using Smartstore.FatturazioneElettronica
+
+@{
+    Layout = "";
+}
+
+@* VERY IMPORTANT for proper model binding *@
+@Html.Hidden("__Type__", Model.GetType().AssemblyQualifiedName)
+
+@Html.HiddenFor(m => m.EntityId)
+
+<table class="adminContent">
+    @if (Model.CanBeRecreated || !Model.InvoiceId.HasValue)
+    {
+        if (Model.CanBeRecreated)
+        {
+            <tr>
+                <td class="adminTitle">
+                    <div class="ctl-label">
+                        &nbsp;
+                    </div>
+                </td>
+                <td class="adminData">
+                    <div class="alert alert-warning">
+                        <i>Sembra che questa fattura non sia stata correttamente consegnata al Sistema di Interscambio. E' possibile effettuare nuovamente l'invio.</i>
+                    </div>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td class="adminTitle">
+                <div class="ctl-label">
+                    <label>Esenzione IVA</label>
+                </div>
+            </td>
+            <td class="adminData">
+                @using (Html.BeginForm("FatturazioneElettronicaAdmin", "OrderEditTab", FormMethod.Post))
+                {
+                    <select id="@Html.IdFor(model => model.SelectedExemptId)" name="@Html.NameFor(model => model.SelectedExemptId)">
+                        <option value="-1">Nessuna esenzione</option>
+                        @foreach (int i in Enum.GetValues(typeof(Smartstore.FatturazioneElettronica.EsenzioneIva)))
+                        {
+                            if (i < 2)
+                            {
+                                continue;
+                            }
+                            <option value="@i">
+                                @{
+                                    var item = (Smartstore.FatturazioneElettronica.EsenzioneIva)i;
+                                }
+                                @Utilities.InsertSpacesBetweenCamelCaseWordsString(item.ToString()) (@item.ToDescription())
+                            </option>
+                        }
+                    </select>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                <div class="ctl-label">
+                    @Html.LabelFor(model => model.Causal)
+                </div>
+            </td>
+            <td class="adminData">
+                @Html.TextAreaFor(model => model.Causal, new { @class = "form-control", rows = "5" })
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle"></td>
+            <td class="adminData">
+                @if (Model.CanBeRecreated)
+                {
+                    <button id="recreateInvoice" type="button" class="btn btn-warning">Ricrea fattura ed inviala</button>
+                }
+                else
+                {
+                    <button id="createInvoice" type="button" class="btn btn-primary">Crea fattura</button>
+                }
+            </td>
+        </tr>
+    }
+    else
+    {
+        <tr>
+            <td class="adminTitle">
+                <div class="ctl-label">
+                    <label>Fattura emessa</label>
+                </div>
+            </td>
+            <td class="adminData">
+                <p style="margin-top:.6rem">
+                    <b>@Model.InvoiceNumber/@Model.InvoiceYear</b> del @Model.CreateDateUtc.Value.ToShortDateString()
+                </p>
+            </td>
+        </tr>
+        if (Model.CanBeDeleted)
+        {
+            <tr>
+                <td class="adminTitle">
+                    <div class="ctl-label">
+                        &nbsp;
+                    </div>
+                </td>
+                <td class="adminData">
+                    <div class="alert alert-warning">
+                        <i>Questa sembra essere l'ultima fattura creata e non è ancora stata inviata al Sistema di Interscambio, per cui è possibile richiederne la cancellazione.</i>
+                        <br /><br />
+                        <button id="removeInvoice" type="button" class="btn btn-warning">Elimina questa fattura</button>
+                    </div>
+                </td>
+            </tr>
+        }
+
+        if (Model.ExemptionId.HasValue)
+        {
+            var exemption = (Smartstore.FatturazioneElettronica.EsenzioneIva)Model.ExemptionId.Value;
+            <text>
+                <tr>
+                    <td class="adminTitle">
+                        <div class="ctl-label">
+                            <label>Esenzione</label>
+                        </div>
+                    </td>
+                    <td class="adminData">
+                        <p style="margin-top:.6rem">
+                            @Utilities.InsertSpacesBetweenCamelCaseWordsString(exemption.ToString())
+                        </p>
+                    </td>
+                </tr>
+            </text>
+        }
+    }
+</table>
+
+@if (Model.InvoiceId.HasValue)
+{
+    <h4 class="mt-4 mb-3">Cronologia stati SdI</h4>
+    <table cellspacing="0" class="w-100">
+        <thead class="t-grid-header">
+            <tr>
+                <th class="t-header" scope="col">
+                    <span class="t-link">Stato</span>
+                </th>
+                <th class="t-header" scope="col">
+                    <span class="t-link">Data creazione</span>
+                </th>
+                <th class="t-header" scope="col">
+                    <span class="t-link">Nome file</span>
+                </th>
+                <th class="t-header" scope="col">
+                    <span class="t-link">Errore</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.History)
+            {
+                <tr>
+                    <td>
+                        @{
+                            switch (item.Status)
+                            {
+                                case Smartstore.FatturazioneElettronica.Domain.InvoiceStatus.SentToSdi:
+                                    <span class="badge badge-info">Inviata</span>
+                                    break;
+                                case Smartstore.FatturazioneElettronica.Domain.InvoiceStatus.Accepted:
+                                    <span class="badge badge-warning">In attesa</span>
+                                    break;
+                                case Smartstore.FatturazioneElettronica.Domain.InvoiceStatus.Delivered:
+                                case Smartstore.FatturazioneElettronica.Domain.InvoiceStatus.NotDeliveredToCustomer:
+                                    <span class="badge badge-success">Consegnata</span>
+                                    break;
+                                default:
+                                    <span class="badge badge-danger">Errore</span>
+                                    break;
+                            }
+                        }
+                    </td>
+                    <td>@item.CreatedOnUtc.ToLocalTime()</td>
+                    <td>@item.SdiFileName</td>
+                    <td>
+                        @if (!String.IsNullOrEmpty(@item.ErrorCode))
+                        {
+                            @item.ErrorCode
+                        }
+                        @item.ErrorDescription
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#createInvoice').click(function (e) {
+            if (confirm('Sicuro di voler emettere fattura?')) {
+                $.ajax('@Url.Action("CreateInvoice", "FatturazioneElettronicaAdmin")',
+                    {
+                        dataType: 'json',
+                        type: 'POST',
+                        data: {
+                            entityId: @Model.EntityId,
+                            causal: $('#@Html.IdFor(m => m.Causal)').val(),
+                            selectedExemptId: $('#@Html.IdFor(m => m.SelectedExemptId)').val()
+                        }
+                    })
+                    .done(function (result) {
+                        location.reload();
+                    })
+                    .fail(function (error) {
+                        console.log(error);
+                    });
+            }
+        });
+
+        $('#removeInvoice').click(function (e) {
+            if (confirm('Sicuro di voler eliminare questa fattura?')) {
+                $.ajax('@Url.Action("DeleteInvoice", "FatturazioneElettronicaAdmin")?orderId=@Model.EntityId',
+                    {
+                        type: 'POST'
+                    })
+                    .done(function (result) {
+                        location.reload();
+                    })
+                    .fail(function (error) {
+                        console.log(error);
+                    });
+            }
+        });
+
+        $('#recreateInvoice').click(function (e) {
+            if (confirm('Sicuro di voler tentare di inviare nuovamente questa fattura?')) {
+                $.ajax('@Url.Action("RecreateInvoice", "FatturazioneElettronicaAdmin")',
+                    {
+                        dataType: 'json',
+                        type: 'POST',
+                        data: {
+                            entityId: @Model.EntityId,
+                            invoiceId: @(Model.InvoiceId ?? 0),
+                            causal: $('#@Html.IdFor(m => m.Causal)').val(),
+                            selectedExemptId: $('#@Html.IdFor(m => m.SelectedExemptId)').val()
+                        }
+                    })
+                    .done(function (result) {
+                        location.reload();
+                    })
+                    .fail(function (error) {
+                        console.log(error);
+                    });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,46 @@
+using FluentValidation;
+using Smartstore.FatturazioneElettronica.XML.FatturaElettronicaBody.DatiBeniServizi;
+using Smartstore.FatturazioneElettronica.XML.Tabelle;
+using System;
+
+namespace Smartstore.FatturazioneElettronica.XML.Validators
+{
+    public class DatiRiepilogoValidator : AbstractValidator<DatiRiepilogo>
+    {
+        public DatiRiepilogoValidator()
+        {
+            RuleFor(x => x.Natura)
+                .SetValidator(new IsValidValidator<DatiRiepilogo, Natura>())
+                .When(x => !string.IsNullOrEmpty(x.Natura));
+            RuleFor(x => x.Natura)
+                .Must(natura => !string.IsNullOrEmpty(natura))
+                .When(x => x.AliquotaIVA == 0)
+                .WithMessage("Natura non presente a fronte di Aliquota IVA pari a 0")
+                .WithErrorCode("00429");
+            RuleFor(x => x.Natura)
+                .Must(natura => string.IsNullOrEmpty(natura))
+                .When(x => x.AliquotaIVA > 0)
+                .WithMessage("Natura presente a fronte di Aliquota IVA diversa da zero")
+                .WithErrorCode("00430");
+            RuleFor(x => x.Natura)
+                .Must(natura => natura != "N6")
+                .When(x => x.EsigibilitaIVA == "S")
+                .WithMessage("Natura con valore 'N6' (inversion contabile) a fronte EsigiblitaIVA uguale a 'S' (scission pagamenti)")
+                .WithErrorCode("00420");
+            RuleFor(x => x.Imposta)
+                .Must((challenge, _) => ImpostaValidateAgainstError00421(challenge))
+                .WithErrorCode("00421");
+            RuleFor(x => x.EsigibilitaIVA)
+                .SetValidator(new IsValidValidator<DatiRiepilogo, EsigibilitaIVA>())
+                .When(x => !string.IsNullOrEmpty(x.EsigibilitaIVA));
+            RuleFor(x => x.RiferimentoNormativo)
+                .Length(1, 100)
+                .Latin1SupplementValidator()
+                .When(x => !string.IsNullOrEmpty(x.RiferimentoNormativo));
+        }
+        private bool ImpostaValidateAgainstError00421(DatiRiepilogo datiRiepilogo)
+        {
+            return (Math.Abs(datiRiepilogo.Imposta - decimal.Parse(((datiRiepilogo.AliquotaIVA * datiRiepilogo.ImponibileImporto) / 100).ToString("0.00"))) <= 0.01m);
+        }
+    }
+}

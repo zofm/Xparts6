@@ -1,0 +1,128 @@
+﻿<Language Name="English" IsDefault="false" IsRightToLeft="false">
+	<LocaleResource Name="Plugins.FriendlyName.SmartStore.FE" AppendRootKey="false">
+		<Value>Fatturazione Elettronica</Value>
+	</LocaleResource>
+	<LocaleResource Name="Plugins.Description.SmartStore.FE" AppendRootKey="false">
+		<Value>Permette di gestire le fatture elettroniche ed inviarle al Sistema di Interscambio mediante API di Aruba.</Value>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.FE.Labels" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="CustomerType">
+				<Value>Tipologia</Value>
+			</LocaleResource>
+			<LocaleResource Name="CustomerType.Consumer">
+				<Value>Privato</Value>
+			</LocaleResource>
+			<LocaleResource Name="CustomerType.Company">
+				<Value>Azienda/Pubblica Amministrazione</Value>
+			</LocaleResource>
+			<LocaleResource Name="VatCode">
+				<Value>Partita IVA</Value>
+			</LocaleResource>
+			<LocaleResource Name="SdiCode">
+				<Value>Codice destinatario</Value>
+			</LocaleResource>
+			<LocaleResource Name="TaxCode">
+				<Value>Codice fiscale</Value>
+			</LocaleResource>
+			<LocaleResource Name="Company">
+				<Value>Ragione sociale</Value>
+			</LocaleResource>
+			<LocaleResource Name="Sdi">
+				<Value>Codice destinatario o indirizzo PEC</Value>
+			</LocaleResource>
+			<LocaleResource Name="Causal">
+				<Value>Causale (informazioni aggiuntive)</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.FE.Settings" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="AppDataFolder">
+				<Value>Percorso cartella App_Data</Value>
+			</LocaleResource>
+			<LocaleResource Name="ArubaUsername">
+				<Value>Username (ARUBA)</Value>
+			</LocaleResource>
+			<LocaleResource Name="ArubaPassword">
+				<Value>Password (ARUBA)</Value>
+			</LocaleResource>
+			<LocaleResource Name="ArubaTaxCode">
+				<Value>Partita IVA (ARUBA)</Value>
+			</LocaleResource>
+			<LocaleResource Name="UseTestEnvironment">
+				<Value>Utilizza ambiente di test</Value>
+			</LocaleResource>
+			<LocaleResource Name="EORI">
+				<Value>Codice EORI</Value>
+			</LocaleResource>
+			<LocaleResource Name="CompanyName">
+				<Value>Ragione sociale</Value>
+			</LocaleResource>
+			<LocaleResource Name="Address">
+				<Value>Indirizzo</Value>
+			</LocaleResource>
+			<LocaleResource Name="AddressNumber">
+				<Value>Numero civico</Value>
+			</LocaleResource>
+			<LocaleResource Name="City">
+				<Value>Città</Value>
+			</LocaleResource>
+			<LocaleResource Name="ZipCode">
+				<Value>CAP</Value>
+			</LocaleResource>
+			<LocaleResource Name="Province">
+				<Value>Provincia</Value>
+			</LocaleResource>
+			<LocaleResource Name="Country">
+				<Value>Paese (2 lettere)</Value>
+			</LocaleResource>
+			<LocaleResource Name="VatCode">
+				<Value>Partita IVA</Value>
+			</LocaleResource>
+			<LocaleResource Name="TaxCode">
+				<Value>Codice fiscale</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.FE.Admin" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="Sent">
+				<Value>Inviata</Value>
+			</LocaleResource>
+			<LocaleResource Name="Waiting">
+				<Value>In attesa</Value>
+			</LocaleResource>
+			<LocaleResource Name="Delivered">
+				<Value>Consegnato</Value>
+			</LocaleResource>
+			<LocaleResource Name="Error">
+				<Value>Errore</Value>
+			</LocaleResource>
+			<LocaleResource Name="Status">
+				<Value>Stato</Value>
+			</LocaleResource>
+			<LocaleResource Name="CreatedOn">
+				<Value>Data</Value>
+			</LocaleResource>
+			<LocaleResource Name="FileName">
+				<Value>File certificato</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.FE.Box" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="SdiTitle">
+				<Value>Informativa per aziende dell'Unione Europea</Value>
+			</LocaleResource>
+			<LocaleResource Name="SdiText">
+				<Value><![CDATA[La Direttiva 2014/55/UE ha stabilito che la fatturazione <b>debba avvenire esclusivamente in forma elettronica</b>, per questo motivo ti chiediamo di indicare anche <b>il tuo codice destinatario</b> in formato alfanumerico di 7 cifre oppure come <b>indirizzo PEC</b>.]]></Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
+</Language>

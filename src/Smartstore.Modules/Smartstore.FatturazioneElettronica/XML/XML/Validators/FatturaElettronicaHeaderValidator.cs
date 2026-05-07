@@ -1,0 +1,27 @@
+using Smartstore.FatturazioneElettronica.XML.Tabelle;
+using FluentValidation;
+
+namespace Smartstore.FatturazioneElettronica.XML.Validators
+{
+    public class FatturaElettronicaHeaderValidator : AbstractValidator<FatturaElettronicaHeader.FatturaElettronicaHeader>
+    {
+        public FatturaElettronicaHeaderValidator()
+        {
+            RuleFor(x => x.DatiTrasmissione)
+                .SetValidator(new DatiTrasmissioneValidator());
+            RuleFor(x => x.CedentePrestatore)
+                .SetValidator(new CedentePrestatoreValidator());
+            RuleFor(x => x.Rappresentante)
+                .SetValidator(new RappresentanteFiscaleValidator())
+                .When(x => !x.Rappresentante.IsEmpty());
+            RuleFor(x => x.CessionarioCommittente)
+                .SetValidator(new CessionarioCommittenteValidator());
+            RuleFor(x => x.TerzoIntermediarioOSoggettoEmittente)
+                .SetValidator(new TerzoIntermediarioOSoggettoEmittenteValidator())
+                .When(x => !x.TerzoIntermediarioOSoggettoEmittente.IsEmpty());
+            RuleFor(x => x.SoggettoEmittente)
+                .SetValidator(new IsValidValidator<FatturaElettronicaHeader.FatturaElettronicaHeader, SoggettoEmittente>())
+                .When(x => !string.IsNullOrEmpty(x.SoggettoEmittente));
+        }
+    }
+}

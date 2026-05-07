@@ -1,0 +1,128 @@
+﻿<Language Name="English" IsDefault="false" IsRightToLeft="false">
+	<LocaleResource Name="Plugins.FriendlyName.SmartStore.FE" AppendRootKey="false">
+		<Value>Fatturazione Elettronica</Value>
+	</LocaleResource>
+	<LocaleResource Name="Plugins.Description.SmartStore.FE" AppendRootKey="false">
+		<Value>Permette di gestire le fatture elettroniche ed inviarle al Sistema di Interscambio mediante API di Aruba.</Value>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.FE.Labels" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="CustomerType">
+				<Value>Customer</Value>
+			</LocaleResource>
+			<LocaleResource Name="CustomerType.Consumer">
+				<Value>Consumer</Value>
+			</LocaleResource>
+			<LocaleResource Name="CustomerType.Company">
+				<Value>Company</Value>
+			</LocaleResource>
+			<LocaleResource Name="VatCode">
+				<Value>VAT code</Value>
+			</LocaleResource>
+			<LocaleResource Name="TaxCode">
+				<Value>TAX code</Value>
+			</LocaleResource>
+			<LocaleResource Name="SdiCode">
+				<Value>SdI code</Value>
+			</LocaleResource>
+			<LocaleResource Name="Company">
+				<Value>Company</Value>
+			</LocaleResource>
+			<LocaleResource Name="Sdi">
+				<Value>Italian SDI code or PEC</Value>
+			</LocaleResource>
+			<LocaleResource Name="Causal">
+				<Value>Purpose (additional information)</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.FE.Settings" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="AppDataFolder">
+				<Value>App_Data folder path</Value>
+			</LocaleResource>
+			<LocaleResource Name="ArubaUsername">
+				<Value>Username (ARUBA)</Value>
+			</LocaleResource>
+			<LocaleResource Name="ArubaPassword">
+				<Value>Password (ARUBA)</Value>
+			</LocaleResource>
+			<LocaleResource Name="ArubaTaxCode">
+				<Value>Tax code (ARUBA)</Value>
+			</LocaleResource>
+			<LocaleResource Name="UseTestEnvironment">
+				<Value>Use test environment</Value>
+			</LocaleResource>
+			<LocaleResource Name="EORI">
+				<Value>EORI code</Value>
+			</LocaleResource>
+			<LocaleResource Name="CompanyName">
+				<Value>Company</Value>
+			</LocaleResource>
+			<LocaleResource Name="Address">
+				<Value>Address</Value>
+			</LocaleResource>
+			<LocaleResource Name="AddressNumber">
+				<Value>Address number</Value>
+			</LocaleResource>
+			<LocaleResource Name="City">
+				<Value>City</Value>
+			</LocaleResource>
+			<LocaleResource Name="ZipCode">
+				<Value>Zip code</Value>
+			</LocaleResource>
+			<LocaleResource Name="Province">
+				<Value>Province</Value>
+			</LocaleResource>
+			<LocaleResource Name="Country">
+				<Value>Country (2 letters)</Value>
+			</LocaleResource>
+			<LocaleResource Name="VatCode">
+				<Value>VAT code</Value>
+			</LocaleResource>
+			<LocaleResource Name="TaxCode">
+				<Value>TAX code</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.FE.Admin" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="Sent">
+				<Value>Sent</Value>
+			</LocaleResource>
+			<LocaleResource Name="Waiting">
+				<Value>Waiting</Value>
+			</LocaleResource>
+			<LocaleResource Name="Delivered">
+				<Value>Delivered</Value>
+			</LocaleResource>
+			<LocaleResource Name="Error">
+				<Value>Error</Value>
+			</LocaleResource>
+			<LocaleResource Name="Status">
+				<Value>Status</Value>
+			</LocaleResource>
+			<LocaleResource Name="CreatedOn">
+				<Value>Created on</Value>
+			</LocaleResource>
+			<LocaleResource Name="FileName">
+				<Value>Certified file</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
+	<LocaleResource Name="Plugins.SmartStore.FE.Box" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="SdiTitle">
+				<Value>Information for companies in the European Union</Value>
+			</LocaleResource>
+			<LocaleResource Name="SdiText">
+				<Value><![CDATA[Directive 2014/55/​​EU established that invoicing <b>must take place exclusively in electronic form</b>, for this reason we ask you to also indicate <b>your Sdi code</b> in alphanumeric format of 7 digits or a <b>PEC address</b>.]]></Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
+</Language>

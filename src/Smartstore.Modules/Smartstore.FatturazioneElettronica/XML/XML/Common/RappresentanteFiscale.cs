@@ -1,0 +1,30 @@
+using System.Xml;
+
+namespace Smartstore.FatturazioneElettronica.XML.Common
+{
+    /// <summary>
+    /// Dati relativi al rappresentante fiscale del cedente / prestatore.
+    /// </summary>
+    public abstract class RappresentanteFiscale : BaseClassSerializable
+    {
+
+        /// <summary>
+        /// Dati relativi al rappresentante fiscale del cedente / prestatore.
+        /// </summary>
+        public RappresentanteFiscale()
+        {
+            DatiAnagrafici = new DatiAnagrafici();
+        }
+        public RappresentanteFiscale(XmlReader r) : base(r) { }
+
+        /// IMPORTANT
+        /// Each data property must be flagged with the Order attribute or it will be ignored.
+        /// Also, properties must be listed with the precise order in the specification.
+
+        /// <summary>
+        /// Dati anagrafici del rappresentante fiscae del cedente / prestatore.
+        /// </summary>
+        [DataProperty]
+        public DatiAnagrafici DatiAnagrafici { get; set; }
+    }
+}

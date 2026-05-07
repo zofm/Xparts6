@@ -1,0 +1,16 @@
+{
+  "$schema": "../module.schema.json",
+  "Group": "Admin",
+  "SystemName": "Smartstore.FatturazioneElettronica",
+  "FriendlyName": "Fatturazione Elettronica",
+  "Description": "Permette di gestire le fatture elettroniche ed inviarle al Sistema di Interscambio mediante API di Aruba.",
+  "Version": "6.3.0",
+  "MinAppVersion": "6.3.0",
+  "Author": "Xparts",
+  "Order": 1,
+  "ResourceRootKey": "Plugins.SmartStore.FE",
+  "PrivateReferences": [
+    "Newtonsoft.Json",
+    "Unidecode.NET"
+  ]
+}
