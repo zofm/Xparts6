@@ -1,0 +1,24 @@
+@model Smartstore.ProductAttachments.Models.PublicInfoModel
+@inject Smartstore.Core.Localization.Localizer T
+
+@if (Model.Attachments.Count > 0)
+{
+    <tab sm-title="@T("Plugins.SmartStore.ProductAttachments.TabTitle")" sm-name="pd-attachments">
+        <ul class="list-unstyled product-attachments">
+            @foreach (var item in Model.Attachments)
+            {
+                <li class="product-attachment mb-2">
+                    <a href="@Url.Action("DownloadAttachment", "ProductAttachments", new { id = item.Id })"
+                       class="btn btn-sm btn-outline-secondary">
+                        <i class="fa fa-download mr-1"></i>
+                        @item.Name
+                    </a>
+                    @if (item.Description.HasValue())
+                    {
+                        <small class="text-muted d-block mt-1">@item.Description</small>
+                    }
+                </li>
+            }
+        </ul>
+    </tab>
+}

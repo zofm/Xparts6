@@ -1,0 +1,32 @@
+<Language Name="English" IsDefault="false" IsRightToLeft="false">
+  <LocaleResource Name="Plugins.FriendlyName.SmartStore.ProductAttachments" AppendRootKey="false">
+    <Value>Product Attachments</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Description.SmartStore.ProductAttachments" AppendRootKey="false">
+    <Value>Attach downloadable files to a product and share them with customers via a dedicated tab on the product detail page.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.TabTitle" AppendRootKey="false">
+    <Value>Attachments</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.NewAttachment" AppendRootKey="false">
+    <Value>Add attachment</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.Name" AppendRootKey="false">
+    <Value>Name</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.Description" AppendRootKey="false">
+    <Value>Description</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.IsActive" AppendRootKey="false">
+    <Value>Is active</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.DisplayOrder" AppendRootKey="false">
+    <Value>Display order</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.Download" AppendRootKey="false">
+    <Value>File</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.SelectFileToContinue" AppendRootKey="false">
+    <Value>Please select a file to continue.</Value>
+  </LocaleResource>
+</Language>

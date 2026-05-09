@@ -1,0 +1,32 @@
+<Language Name="Italian" IsDefault="false" IsRightToLeft="false">
+  <LocaleResource Name="Plugins.FriendlyName.SmartStore.ProductAttachments" AppendRootKey="false">
+    <Value>Allegati prodotto</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.Description.SmartStore.ProductAttachments" AppendRootKey="false">
+    <Value>Permette di allegare dei file ad una scheda prodotto.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.TabTitle" AppendRootKey="false">
+    <Value>Allegati</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.NewAttachment" AppendRootKey="false">
+    <Value>Aggiungi allegato</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.Name" AppendRootKey="false">
+    <Value>Nome</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.Description" AppendRootKey="false">
+    <Value>Breve descrizione</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.IsActive" AppendRootKey="false">
+    <Value>Visualizza sul catalogo</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.DisplayOrder" AppendRootKey="false">
+    <Value>Ordinamento</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.Download" AppendRootKey="false">
+    <Value>File allegato</Value>
+  </LocaleResource>
+  <LocaleResource Name="Plugins.SmartStore.ProductAttachments.SelectFileToContinue" AppendRootKey="false">
+    <Value>Per continuare è necessario selezionare almeno un file.</Value>
+  </LocaleResource>
+</Language>

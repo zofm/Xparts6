@@ -1,0 +1,72 @@
+@model Smartstore.ProductAttachments.Models.ProductAttachmentPopupModel
+@inject Smartstore.Core.Localization.Localizer T
+@{
+    Layout = "_AdminPopupLayout";
+    ViewBag.Title = (ViewBag.IsEdit == true ? T("Admin.Common.Edit") : T("Admin.Common.AddNew")).Value;
+}
+
+<form asp-action="CreatePopup" asp-controller="ProductAttachmentsAdmin" asp-area="Admin"
+      asp-route-btnId="@ViewBag.btnId" asp-route-formId="@ViewBag.formId">
+
+    <input type="hidden" asp-for="ProductId" />
+
+    <div class="section-header">
+        <div class="title">@ViewBag.Title</div>
+        <div class="options">
+            <button type="submit" name="save" value="save" class="btn btn-primary">
+                <i class="fa fa-check"></i>
+                <span>@T("Admin.Common.Save")</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="adminContent">
+        <div class="adminRow">
+            <div class="adminTitle"><smart-label asp-for="Name" /></div>
+            <div class="adminData">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle"><smart-label asp-for="Description" /></div>
+            <div class="adminData">
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle"><smart-label asp-for="DisplayOrder" /></div>
+            <div class="adminData">
+                <input asp-for="DisplayOrder" class="form-control" type="number" />
+                <span asp-validation-for="DisplayOrder"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle"><smart-label asp-for="IsActive" /></div>
+            <div class="adminData">
+                <input asp-for="IsActive" type="checkbox" />
+                <span asp-validation-for="IsActive"></span>
+            </div>
+        </div>
+        <div class="adminRow">
+            <div class="adminTitle"><smart-label asp-for="DownloadId" /></div>
+            <div class="adminData">
+                <editor asp-for="DownloadId" attrs='new AttributeDictionary { { "entityId", "0" }, { "entityName", "ProductAttachment" } }' />
+                <span asp-validation-for="DownloadId"></span>
+            </div>
+        </div>
+
+        @if (Model.Warnings.Count > 0)
+        {
+            <div class="adminRow">
+                <div class="adminData">
+                    @foreach (var warning in Model.Warnings)
+                    {
+                        <p class="text-danger">@warning</p>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</form>

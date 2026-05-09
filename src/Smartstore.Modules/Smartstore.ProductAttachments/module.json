@@ -1,0 +1,12 @@
+{
+  "$schema": "../module.schema.json",
+  "Group": "Admin",
+  "SystemName": "Smartstore.ProductAttachments",
+  "FriendlyName": "Product Attachments",
+  "Description": "Attach downloadable files to a product and share them with customers via a dedicated tab on the product detail page.",
+  "Version": "6.3.0",
+  "MinAppVersion": "6.3.0",
+  "Author": "Xparts",
+  "Order": 1,
+  "ResourceRootKey": "Plugins.SmartStore.ProductAttachments"
+}

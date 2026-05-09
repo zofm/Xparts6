@@ -1,0 +1,80 @@
+@model Smartstore.ProductAttachments.Models.ProductAttachmentsGridModel
+@inject Smartstore.Core.Localization.Localizer T
+
+@{
+    Layout = "";
+    var createUrl = Url.Action("CreatePopup", "ProductAttachmentsAdmin", new { area = "Admin", productId = Model.EntityId, btnId = "btnRefresh", formId = "product-form" });
+    var listUrl = Url.Action("List", "ProductAttachmentsAdmin", new { area = "Admin", productId = Model.EntityId });
+    var deleteUrl = Url.Action("Delete", "ProductAttachmentsAdmin", new { area = "Admin" });
+    var editUrlBase = Url.Action("EditPopup", "ProductAttachmentsAdmin", new { area = "Admin" });
+}
+
+<div id="productattachments-container">
+    <div class="mb-2">
+        <button type="button" id="add-attachment-btn" class="btn btn-primary btn-sm">
+            <i class="fa fa-plus"></i>
+            <span>@T("Plugins.SmartStore.ProductAttachments.NewAttachment")</span>
+        </button>
+    </div>
+
+    <div id="attachments-grid">
+        <table class="table table-sm table-hover" id="attachments-table">
+            <thead>
+                <tr>
+                    <th>@T("Plugins.SmartStore.ProductAttachments.Name")</th>
+                    <th>@T("Plugins.SmartStore.ProductAttachments.DisplayOrder")</th>
+                    <th class="text-center">@T("Plugins.SmartStore.ProductAttachments.IsActive")</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="attachments-tbody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<input type="hidden" id="btnRefresh" />
+
+<script>
+    (function () {
+        function loadGrid() {
+            $.get('@listUrl', function (result) {
+                var tbody = $('#attachments-tbody').empty();
+                $.each(result.Data, function (i, item) {
+                    var editUrl = '@editUrlBase' + '?id=' + item.Id + '&btnId=btnRefresh&formId=product-form';
+                    var row = $('<tr>');
+                    row.append($('<td>').html('<a href="#" class="edit-link" data-url="' + editUrl + '">' + (item.Name || '') + '</a>'));
+                    row.append($('<td>').text(item.DisplayOrder));
+                    row.append($('<td class="text-center">').html(item.IsActive ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>'));
+                    var deleteBtn = $('<button type="button" class="btn btn-sm btn-danger delete-btn" data-id="' + item.Id + '"><i class="far fa-trash-alt"></i></button>');
+                    row.append($('<td class="text-right">').append(deleteBtn));
+                    tbody.append(row);
+                });
+            });
+        }
+
+        $('#attachments-tbody').on('click', '.edit-link', function (e) {
+            e.preventDefault();
+            openPopup($(this).data('url'), true);
+        });
+
+        $('#attachments-tbody').on('click', '.delete-btn', function () {
+            var id = $(this).data('id');
+            if (confirm('@T("Admin.Common.AskToProceed")')) {
+                $.post('@deleteUrl', { id: id }, function () {
+                    loadGrid();
+                });
+            }
+        });
+
+        $('#add-attachment-btn').on('click', function () {
+            openPopup('@createUrl', true);
+        });
+
+        $('#btnRefresh').on('change click', function () {
+            loadGrid();
+        });
+
+        loadGrid();
+    })();
+</script>
