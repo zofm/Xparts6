@@ -1,0 +1,13 @@
+{
+  "$schema": "../module.schema.json",
+  "Author": "Xparts",
+  "Group": "Shipping",
+  "SystemName": "Smartstore.StateOrProvinceImporter",
+  "FriendlyName": "State/Province Importer",
+  "Description": "Imports states and provinces from a CSV file.",
+  "Version": "6.3.0",
+  "MinAppVersion": "6.3.0",
+  "Order": 1,
+  "ResourceRootKey": "Plugins.Common.StateOrProvinceImporter",
+  "ProjectUrl": ""
+}

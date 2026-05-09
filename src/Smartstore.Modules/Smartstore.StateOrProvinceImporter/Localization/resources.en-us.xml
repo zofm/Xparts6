@@ -1,0 +1,14 @@
+<Language Name="English" IsDefault="false" IsRightToLeft="false">
+    <LocaleResource Name="Plugins.FriendlyName.Smartstore.StateOrProvinceImporter" AppendRootKey="false">
+        <Value>Import states/provinces from CSV</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.Smartstore.StateOrProvinceImporter" AppendRootKey="false">
+        <Value>Imports a CSV file with countries and states/provinces, available at: https://github.com/dr5hn/countries-states-cities-database</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.SmartStore.StateOrProvinceImporter.CsvFilePath" AppendRootKey="false">
+        <Value>CSV file path</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.SmartStore.StateOrProvinceImporter.CsvFilePath.Hint" AppendRootKey="false">
+        <Value>Specify the full path on disk of the CSV file to import.</Value>
+    </LocaleResource>
+</Language>
