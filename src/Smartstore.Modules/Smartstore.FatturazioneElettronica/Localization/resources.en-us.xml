@@ -26,6 +26,12 @@
 			<LocaleResource Name="SdiCode">
 				<Value>SdI code</Value>
 			</LocaleResource>
+			<LocaleResource Name="Validation.SdiLength">
+				<Value>The SdI code must be exactly 7 characters.</Value>
+			</LocaleResource>
+			<LocaleResource Name="Validation.SdiFormat">
+				<Value>The SdI code must contain only letters and numbers (7 characters).</Value>
+			</LocaleResource>
 			<LocaleResource Name="Company">
 				<Value>Company</Value>
 			</LocaleResource>

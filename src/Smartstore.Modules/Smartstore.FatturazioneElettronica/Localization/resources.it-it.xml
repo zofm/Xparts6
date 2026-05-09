@@ -23,6 +23,12 @@
 			<LocaleResource Name="SdiCode">
 				<Value>Codice destinatario</Value>
 			</LocaleResource>
+			<LocaleResource Name="Validation.SdiLength">
+				<Value>Il codice destinatario deve essere esattamente 7 caratteri.</Value>
+			</LocaleResource>
+			<LocaleResource Name="Validation.SdiFormat">
+				<Value>Il codice destinatario deve contenere solo lettere e numeri (7 caratteri).</Value>
+			</LocaleResource>
 			<LocaleResource Name="TaxCode">
 				<Value>Codice fiscale</Value>
 			</LocaleResource>
