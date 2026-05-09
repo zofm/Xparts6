@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Smartstore.Core.Checkout.Orders;
 using Smartstore.Core.Common;
 using Smartstore.Core.Data;
+using Smartstore.Core.Identity;
 using Smartstore.FatturazioneElettronica.Domain;
 using Smartstore.FatturazioneElettronica.Models;
 using Smartstore.FatturazioneElettronica.Settings;
@@ -70,33 +71,33 @@ namespace Smartstore.FatturazioneElettronica.Services
             return pecDestinatario;
         }
 
-        private Cessionario GetCessionario(Address billingAddress, string vatCode, string taxCode, bool isCessionarioPrivato)
+        private Cessionario GetCessionario(Address billingAddress, string vatCode, string taxCode, bool isCessionarioPrivato, string vatCountryCode)
         {
             var cessionario = new Cessionario
             {
                 Indirizzo = billingAddress.Address1,
                 Comune = billingAddress.City,
                 Provincia = billingAddress.StateProvince?.Abbreviation,
-                Paese = billingAddress.Country.TwoLetterIsoCode,
+                Paese = billingAddress.Country.TwoLetterIsoCode,   // physical address: keep as-is
                 Cap = billingAddress.ZipPostalCode
             };
 
-            if (isCessionarioPrivato && billingAddress.Country.TwoLetterIsoCode.ToUpper() == "IT")
+            if (isCessionarioPrivato && vatCountryCode == "IT")
             {
                 cessionario.TipoSoggetto = TipoSoggetto.Privato;
                 cessionario.Nome = billingAddress.FirstName;
                 cessionario.Cognome = billingAddress.LastName;
-                cessionario.CodiceFiscale = GetCodiceFiscaleCessionario(billingAddress, taxCode);
+                cessionario.CodiceFiscale = GetCodiceFiscaleCessionario(vatCountryCode, taxCode);
             }
-            else if (isCessionarioPrivato && billingAddress.Country.TwoLetterIsoCode.ToUpper() != "IT")
+            else if (isCessionarioPrivato && vatCountryCode != "IT")
             {
                 cessionario.TipoSoggetto = TipoSoggetto.Azienda;
                 cessionario.Nome = billingAddress.FirstName;
                 cessionario.Cognome = billingAddress.LastName;
                 cessionario.IdFiscaleIva = new IdFiscaleIva
                 {
-                    CodicePaese = billingAddress.Country.TwoLetterIsoCode,
-                    PartitaIva = GetPartitaIvaCessionario(billingAddress, vatCode, taxCode, isCessionarioPrivato)
+                    CodicePaese = vatCountryCode,
+                    PartitaIva = GetPartitaIvaCessionario(vatCode, taxCode, vatCountryCode)
                 };
             }
             else
@@ -106,31 +107,47 @@ namespace Smartstore.FatturazioneElettronica.Services
                 cessionario.PartitaIva = vatCode;
                 cessionario.IdFiscaleIva = new IdFiscaleIva
                 {
-                    CodicePaese = billingAddress.Country.TwoLetterIsoCode,
-                    PartitaIva = GetPartitaIvaCessionario(billingAddress, vatCode, taxCode, isCessionarioPrivato)
+                    CodicePaese = vatCountryCode,
+                    PartitaIva = GetPartitaIvaCessionario(vatCode, taxCode, vatCountryCode)
                 };
             }
 
             return cessionario;
         }
 
-        private string GetCodiceFiscaleCessionario(Address billingAddress, string taxCode)
+        private static string GetCodiceFiscaleCessionario(string vatCountryCode, string taxCode)
         {
-            if (billingAddress.Country.TwoLetterIsoCode.Equals("IT"))
+            if (vatCountryCode.Equals("IT", StringComparison.OrdinalIgnoreCase))
                 return taxCode?.Trim().ToUpper();
             return null;
         }
 
-        private string GetPartitaIvaCessionario(Address billingAddress, string vatCode, string taxCode, bool isCessionarioPrivato)
+        private string GetPartitaIvaCessionario(string vatCode, string taxCode, string vatCountryCode)
         {
             var countryCodesInsideUE = _fatturazioneCountryService.GetEuropeanCountryTwoLetterIsoCodes();
-            if (countryCodesInsideUE.Contains(billingAddress.Country.TwoLetterIsoCode))
+            if (countryCodesInsideUE.Contains(vatCountryCode))
             {
                 if (!string.IsNullOrEmpty(taxCode))
                     return taxCode.Trim().ToUpper();
                 return "OO99999999999";
             }
             return "OO99999999999";
+        }
+
+        /// <summary>
+        /// Extracts the 2-letter country code from the first two characters of a VAT number.
+        /// Falls back to the billing address country when the VAT is absent or does not start with letters.
+        /// </summary>
+        private static string GetCountryCodeFromVat(string vatCode, string billingAddressCountry)
+        {
+            if (!string.IsNullOrWhiteSpace(vatCode)
+                && vatCode.Length >= 2
+                && char.IsAsciiLetter(vatCode[0])
+                && char.IsAsciiLetter(vatCode[1]))
+            {
+                return vatCode[..2].ToUpper();
+            }
+            return billingAddressCountry?.ToUpper();
         }
 
         private ModalitaPagamento GetModalitaPagamento(string paymentSystemName)
@@ -151,6 +168,7 @@ namespace Smartstore.FatturazioneElettronica.Services
         public FileInfo CreateInvoiceXml(int orderId)
         {
             var order = _db.Orders
+                .Include(x => x.Customer)
                 .Include(x => x.BillingAddress.Country)
                 .Include(x => x.BillingAddress.StateProvince)
                 .Include(x => x.OrderItems).ThenInclude(x => x.Product)
@@ -161,23 +179,25 @@ namespace Smartstore.FatturazioneElettronica.Services
             Guard.NotNull(order, nameof(order));
             Guard.NotNull(invoice, nameof(invoice));
 
-            var customerVatCode = order.BillingAddress.Title;
-            var customerSdiCode = order.BillingAddress.FaxNumber;
-            var customerType = order.BillingAddress.Salutation;
-
+            var customer = order.Customer;
+            var customerVatCode = customer.GenericAttributes.VatNumber?.Trim();
+            var customerSdiCode = customer.GenericAttributes.Get<string>("SdiCode")?.Trim();
+            var isCessionarioPrivato = string.IsNullOrWhiteSpace(order.Customer.Company);
+            // Derive fiscal country from the VAT prefix; fall back to billing address country for private customers
+            var vatCountryCode = GetCountryCodeFromVat(customerVatCode, order.BillingAddress.Country.TwoLetterIsoCode);
             var countryCodesInsideUE = _fatturazioneCountryService.GetEuropeanCountryTwoLetterIsoCodes();
 
-            if (customerType == "A" && string.IsNullOrWhiteSpace(order.BillingAddress.Title))
+            if (!isCessionarioPrivato && string.IsNullOrWhiteSpace(customerVatCode))
             {
                 Logger.Warn($"Errore fatturazione (verso azienda): per l'ordine n. {order.Id} (fattura n. X{invoice.Number}/{invoice.Year}) non è presente la partita IVA.");
                 return null;
             }
-            if (customerType == "A" && countryCodesInsideUE.Contains(order.BillingAddress.Country.TwoLetterIsoCode) && string.IsNullOrWhiteSpace(order.BillingAddress.FaxNumber))
+            if (!isCessionarioPrivato && countryCodesInsideUE.Contains(vatCountryCode) && string.IsNullOrWhiteSpace(customerSdiCode))
             {
                 Logger.Warn($"Errore fatturazione (verso azienda): per l'ordine n. {order.Id} (fattura n. X{invoice.Number}/{invoice.Year}) non è presente il codice SDI.");
                 return null;
             }
-            if (customerType == "P" && order.BillingAddress.Country.TwoLetterIsoCode == "IT" && string.IsNullOrWhiteSpace(order.BillingAddress.Title))
+            if (isCessionarioPrivato && vatCountryCode == "IT" && string.IsNullOrWhiteSpace(customerVatCode))
             {
                 Logger.Warn($"Errore fatturazione (verso privato): per l'ordine n. {order.Id} (fattura n. X{invoice.Number}/{invoice.Year}) non è presente il codice fiscale.");
                 return null;
@@ -185,7 +205,6 @@ namespace Smartstore.FatturazioneElettronica.Services
 
             var invoiceNumber = invoice.Number;
             var invoiceDate = invoice.CreatedOnUtc.Value;
-            var isCessionarioPrivato = customerType != "A";
 
             EsenzioneIva? invoiceExemptionType = null;
             if (invoice.ExemptionId.HasValue)
@@ -198,8 +217,8 @@ namespace Smartstore.FatturazioneElettronica.Services
                 ProgressivoInvio = $"XP{order.Id}",
                 IdCodiceTrasmissione = _fatturazioneSettings.ArubaTaxCode,
                 IdPaeseTrasmissione = "IT",
-                CodiceDestinatario = GetCodiceDestinatario(order.BillingAddress.Country.TwoLetterIsoCode, customerSdiCode, isCessionarioPrivato),
-                PECDestinatario = GetPECDestinatario(order.BillingAddress.Country.TwoLetterIsoCode, customerSdiCode, isCessionarioPrivato),
+                CodiceDestinatario = GetCodiceDestinatario(vatCountryCode, customerSdiCode, isCessionarioPrivato),
+                PECDestinatario = GetPECDestinatario(vatCountryCode, customerSdiCode, isCessionarioPrivato),
                 Intestazione = new Intestazione
                 {
                     TipoDocumento = TipoDocumento.Fattura,
@@ -229,10 +248,10 @@ namespace Smartstore.FatturazioneElettronica.Services
                         CodicePaese = _fatturazioneSettings.Country
                     }
                 },
-                Cessionario = GetCessionario(order.BillingAddress, customerVatCode, customerVatCode, isCessionarioPrivato)
+                Cessionario = GetCessionario(order.BillingAddress, customerVatCode, customerVatCode, isCessionarioPrivato, vatCountryCode)
             };
 
-            var vatPercentage = order.TaxRatesDictionary.OrderByDescending(x => x.Key).ElementAt(0).Key;
+            var vatPercentage = order.TaxRatesDictionary.OrderByDescending(x => x.Key).FirstOrDefault().Key;
 
             order.OrderItems.ToList().ForEach(x =>
             {
