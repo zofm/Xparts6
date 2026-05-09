@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <Product>Smartstore Shipping By Weight Importer</Product>
+    <OutputPath>..\..\Smartstore.Web\Modules\Smartstore.ShippingByWeightImporter</OutputPath>
+    <OutDir>$(OutputPath)</OutDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Smartstore.Modules\Smartstore.ShippingByWeight\Smartstore.ShippingByWeight.csproj" />
+  </ItemGroup>
+</Project>

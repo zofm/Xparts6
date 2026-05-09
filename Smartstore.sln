@@ -87,6 +87,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartstore.PagOnline", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartstore.FatturazioneElettronica", "src\Smartstore.Modules\Smartstore.FatturazioneElettronica\Smartstore.FatturazioneElettronica.csproj", "{2CD9177D-B359-33FB-6284-2B729A425468}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{827E0CD3-B72D-47B6-A68D-7590B98EB39B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smartstore.ShippingByWeightImporter", "src\Smartstore.Modules\Smartstore.ShippingByWeightImporter\Smartstore.ShippingByWeightImporter.csproj", "{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -676,6 +680,24 @@ Global
 		{2CD9177D-B359-33FB-6284-2B729A425468}.Release|x64.Build.0 = Release|Any CPU
 		{2CD9177D-B359-33FB-6284-2B729A425468}.Release|x86.ActiveCfg = Release|Any CPU
 		{2CD9177D-B359-33FB-6284-2B729A425468}.Release|x86.Build.0 = Release|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Debug|x64.Build.0 = Debug|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Debug|x86.Build.0 = Debug|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.DebugNoRazorCompile|Any CPU.ActiveCfg = DebugNoRazorCompile|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.DebugNoRazorCompile|Any CPU.Build.0 = DebugNoRazorCompile|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.DebugNoRazorCompile|x64.ActiveCfg = DebugNoRazorCompile|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.DebugNoRazorCompile|x64.Build.0 = DebugNoRazorCompile|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.DebugNoRazorCompile|x86.ActiveCfg = DebugNoRazorCompile|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.DebugNoRazorCompile|x86.Build.0 = DebugNoRazorCompile|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Release|x64.ActiveCfg = Release|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Release|x64.Build.0 = Release|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Release|x86.ActiveCfg = Release|Any CPU
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -709,6 +731,7 @@ Global
 		{A7E56AC6-2ECF-029F-4CA1-522EAE8AE087} = {E5C1AA43-6B44-4EFA-8DE9-6070EE007CE3}
 		{7DB55FDB-0F6A-403A-A52C-843616076E56} = {E5C1AA43-6B44-4EFA-8DE9-6070EE007CE3}
 		{2CD9177D-B359-33FB-6284-2B729A425468} = {E5C1AA43-6B44-4EFA-8DE9-6070EE007CE3}
+		{43C94E6B-BCB3-4CFF-A85E-DB0D8D8BFB52} = {E5C1AA43-6B44-4EFA-8DE9-6070EE007CE3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0A0B995-5D0B-458E-BCC0-1071B76949D1}

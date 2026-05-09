@@ -1,0 +1,29 @@
+@using Smartstore.ShippingByWeightImporter.Models
+
+@model ConfigurationModel
+@{
+    Layout = "_ConfigureModule";
+}
+
+@await Component.InvokeAsync("StoreScope")
+
+<widget target-zone="admin_button_toolbar_before">
+    <button id="SaveConfigButton" type="submit" name="save" class="btn btn-warning" value="save">
+        <i class="fa fa-check"></i>
+        <span>@T("Admin.Common.Save")</span>
+    </button>
+</widget>
+
+<form asp-action="Configure">
+    <div class="adminContent">
+        <div class="adminRow">
+            <div class="adminTitle">
+                <smart-label asp-for="ExcelFilePath" />
+            </div>
+            <div class="adminData">
+                <editor asp-for="ExcelFilePath" />
+                <span asp-validation-for="ExcelFilePath"></span>
+            </div>
+        </div>
+    </div>
+</form>

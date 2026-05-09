@@ -1,0 +1,11 @@
+<Language Name="Italian" IsDefault="false" IsRightToLeft="false">
+    <LocaleResource Name="Plugins.FriendlyName.Smartstore.ShippingByWeightImporter" AppendRootKey="false">
+        <Value>Importa costi spedizione da Excel</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.Smartstore.ShippingByWeightImporter" AppendRootKey="false">
+        <Value>Permette di importare i costi di spedizione per peso da un file Excel.</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.SmartStore.ShippingByWeightImporter.ExcelFilePath" AppendRootKey="false">
+        <Value>Percorso file Excel</Value>
+    </LocaleResource>
+</Language>
