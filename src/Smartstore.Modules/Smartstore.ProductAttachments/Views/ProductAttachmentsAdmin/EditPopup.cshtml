@@ -59,7 +59,7 @@
                         @if (!Model.CurrentDownload.UseDownloadUrl)
                         {
                             <a href="@Model.CurrentDownload.DownloadUrl" target="_blank">
-                                @if (Model.DownloadThumbUrl.HasValue())
+                                @if (!string.IsNullOrEmpty(Model.DownloadThumbUrl))
                                 {
                                     <img src="@Model.DownloadThumbUrl" style="max-height:80px;" />
                                 }

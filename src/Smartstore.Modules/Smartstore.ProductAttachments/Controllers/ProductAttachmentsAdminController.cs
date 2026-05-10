@@ -251,12 +251,34 @@ namespace Smartstore.ProductAttachments.Controllers
                 return;
 
             var download = await _db.Downloads.FindAsync(downloadId.Value);
-            if (download != null && download.IsTransient)
+            if (download != null)
             {
+                // Existing Download record (e.g. created via URL save): just attach it to the entity.
                 download.IsTransient = false;
                 download.EntityId = attachmentId;
                 download.EntityName = nameof(ProductAttachment);
                 await _db.SaveChangesAsync();
+            }
+            else
+            {
+                // No Download record found: the id is a MediaFileId coming from a direct file upload.
+                var mediaFile = await _db.MediaFiles.FindAsync(downloadId.Value);
+                if (mediaFile != null)
+                {
+                    var newDownload = new Smartstore.Core.Content.Media.Download
+                    {
+                        MediaFileId = mediaFile.Id,
+                        EntityId = attachmentId,
+                        EntityName = nameof(ProductAttachment),
+                        DownloadGuid = Guid.NewGuid(),
+                        UseDownloadUrl = false,
+                        DownloadUrl = string.Empty,
+                        IsTransient = false,
+                        UpdatedOnUtc = DateTime.UtcNow
+                    };
+                    _db.Downloads.Add(newDownload);
+                    await _db.SaveChangesAsync();
+                }
             }
         }
     }
