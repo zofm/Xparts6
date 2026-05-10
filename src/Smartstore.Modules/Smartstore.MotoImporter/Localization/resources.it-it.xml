@@ -1,0 +1,14 @@
+<Language Name="Italian" IsDefault="false" IsRightToLeft="false">
+    <LocaleResource Name="Plugins.FriendlyName.Smartstore.MotoImporter" AppendRootKey="false">
+        <Value>Moto Importer</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.Smartstore.MotoImporter" AppendRootKey="false">
+        <Value>Importa gli attributi di compatibilità moto per i prodotti da file Excel.</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Xparts.MotoImporter.ExcelFolderPath" AppendRootKey="false">
+        <Value>Percorso cartella Excel</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Xparts.MotoImporter.ExcelFolderPath.Hint" AppendRootKey="false">
+        <Value>Specifica il percorso completo della cartella contenente i file Excel (.xlsx) da importare. Ogni file elaborato verrà eliminato al termine dell'importazione.</Value>
+    </LocaleResource>
+</Language>

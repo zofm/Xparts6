@@ -1,0 +1,14 @@
+<Language Name="English" IsDefault="false" IsRightToLeft="false">
+    <LocaleResource Name="Plugins.FriendlyName.Smartstore.MotoImporter" AppendRootKey="false">
+        <Value>Moto Importer</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Description.Smartstore.MotoImporter" AppendRootKey="false">
+        <Value>Imports motorbike compatibility attributes for products from Excel files.</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Xparts.MotoImporter.ExcelFolderPath" AppendRootKey="false">
+        <Value>Excel folder path</Value>
+    </LocaleResource>
+    <LocaleResource Name="Plugins.Xparts.MotoImporter.ExcelFolderPath.Hint" AppendRootKey="false">
+        <Value>Specify the full path to the folder containing the Excel (.xlsx) files to import. Each processed file will be deleted after import.</Value>
+    </LocaleResource>
+</Language>
