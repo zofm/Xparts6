@@ -68,8 +68,7 @@ public partial class QueuedEmailService : IQueuedEmailService
 
         if (numTotalDeleted > 1000 && _db.DataProvider.CanOptimizeTable)
         {
-            var tableName = _db.Model.FindEntityType(typeof(QueuedEmail)).GetTableName();
-            await CommonHelper.TryAction(() => _db.DataProvider.OptimizeTableAsync(tableName, cancelToken));
+            await CommonHelper.TryAction(() => _db.DataProvider.OptimizeTableAsync<QueuedEmail>(cancelToken));
         }
 
         return numTotalDeleted;
@@ -80,7 +79,7 @@ public partial class QueuedEmailService : IQueuedEmailService
         var result = false;
         var saveToDisk = ShouldSaveToDisk();
         var groupedQueuedEmails = queuedEmails.GroupBy(x => x.EmailAccountId);
-        
+
         foreach (var group in groupedQueuedEmails)
         {
             var account = group.FirstOrDefault().EmailAccount;
@@ -276,7 +275,7 @@ public partial class QueuedEmailService : IQueuedEmailService
                         attachment.IsEmbedded = true;
                         attachment.ContentId = qea.ContentId;
                     }
-                    
+
                     msg.Attachments.Add(attachment);
                 }
             }

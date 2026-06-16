@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
+using Smartstore.Http;
 using Smartstore.IO;
 using Smartstore.Utilities;
 
@@ -207,7 +208,7 @@ public static class HttpRequestExtensions
         if (request is null)
             return false;
 
-        return request.HttpContext.GetItem("IsSubRequest", () => 
+        return request.HttpContext.GetItem("IsSubRequest", () =>
         {
             if (IsExternalReferrer(request))
             {
@@ -219,6 +220,28 @@ public static class HttpRequestExtensions
                 IsGet(request) == false ||
                 IsAjax(request) == true;
         });
+    }
+
+    /// <summary>
+    /// Builds an absolute URL (scheme + host + port + path) from the given app-relative <paramref name="path"/>.
+    /// If <paramref name="path"/> is <see langword="null"/> or empty, the current request path (including query string) is used.
+    /// </summary>
+    /// <param name="path">
+    /// An optional app-relative path (e.g. <c>/checkout/confirm</c> or <c>~/checkout/confirm</c>).
+    /// When omitted, the current <see cref="HttpRequest.Path"/> and <see cref="HttpRequest.QueryString"/> are used.
+    /// </param>
+    /// <returns>An absolute URL string such as <c>https://example.com:5001/checkout/confirm</c>.</returns>
+    public static string ToAbsoluteUrl(this HttpRequest request, string? path = null)
+    {
+        Guard.NotNull(request);
+
+        if (path.IsEmpty())
+        {
+            // Use the raw current request URL (PathBase + Path + QueryString).
+            path = request.RawUrl();
+        }
+
+        return WebHelper.GetAbsoluteUrl(path, request, true);
     }
 
     /// <summary>

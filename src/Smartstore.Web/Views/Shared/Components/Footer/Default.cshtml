@@ -1,18 +1,23 @@
 ﻿@model FooterModel
 
-@using Smartstore.Core.Content.Menus;
 @using Smartstore.Web.Models.Common;
 @using Smartstore.Core.Security;
 
 @{
     var inverseFooter = Display.GetThemeVariable<bool>("inverse-footer");
+    var showLinks = Model.ShowSocialLinks && Model.SocialLinks.Count > 0;
+    
+    if (showLinks && Assets.JsonLd.TryGetFragment("Organization", out var org))
+    {
+        org.Arr("sameAs", Model.SocialLinks.Select(x => x.Href).Where(x => x != "#"));
+    }
 }
 
 <footer id="footer" class="@(inverseFooter ? "footer-inverse" : "footer-light")">
 
     <zone name="footer_top"></zone>
 
-    <nav sm-if="Model.ShowSocialLinks && Model.SocialLinks.Any()" class="footer-social-wrapper" aria-label="@T("Aria.Label.SocialMediaLinks")">
+    <nav sm-if="showLinks" class="footer-social-wrapper" aria-label="@T("Aria.Label.SocialMediaLinks")">
         <div class="container footer-social">
             <div class="row">
                 <div class="col text-center">
