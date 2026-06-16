@@ -8,6 +8,6 @@ namespace Smartstore.MotoImporter.Settings
         /// Full path to the folder containing Excel files to import.
         /// Each .xlsx file in this folder will be processed and then deleted.
         /// </summary>
-        public string ExcelFolderPath { get; set; }
+        public string ExcelFolderPath { get; set; } = string.Empty;
     }
 }

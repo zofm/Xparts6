@@ -120,6 +120,17 @@
 		</Children>
 	</LocaleResource>
 
+	<LocaleResource Name="Plugins.SmartStore.FE.Customer" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="SdiCode">
+				<Value>Codice destinatario SDI</Value>
+			</LocaleResource>
+			<LocaleResource Name="SdiCode.Help">
+				<Value>Inserisci il codice destinatario per il Sistema di Interscambio (7 caratteri alfanumerici, es. ABCD123). Verrà automaticamente convertito in maiuscole.</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
 	<LocaleResource Name="Plugins.SmartStore.FE.Box" AppendRootKey="false">
 		<Children>
 			<LocaleResource Name="SdiTitle">

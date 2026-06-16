@@ -1,0 +1,63 @@
+@model Smartstore.FatturazioneElettronica.Models.CustomerSdiCodeModel
+
+@{
+    Layout = "";
+}
+
+@* VERY IMPORTANT for proper model binding *@
+@Html.Hidden("__Type__", Model.GetType().AssemblyQualifiedName)
+
+@Html.HiddenFor(m => m.CustomerId)
+
+<div class="adminContent">
+    <div class="adminRow">
+        <div class="adminTitle">
+            <smart-label asp-for="SdiCode" />
+        </div>
+        <div class="adminData">
+            <input asp-for="SdiCode" class="form-control" maxlength="7" placeholder="es. ABCD123" />
+            <small class="form-text text-muted d-block mt-2">
+                @T("Plugins.SmartStore.FE.Customer.SdiCode.Help")
+            </small>
+            <span asp-validation-for="SdiCode" class="text-danger d-block mt-2"></span>
+        </div>
+    </div>
+
+    <div class="adminRow">
+        <div class="adminTitle"></div>
+        <div class="adminData">
+            <button id="saveSdiCode" type="button" class="btn btn-primary">
+                <i class="fa fa-check"></i>
+                <span>@T("Admin.Common.Save")</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script sm-target-zone="scripts" data-origin="customer-sdi-code">
+    $(function () {
+        $('#saveSdiCode').on('click', function () {
+            var customerId = @Html.Raw(Model.CustomerId);
+            var sdiCode = $('#@Html.IdFor(m => m.SdiCode)').val();
+
+            $.ajax({
+                url: '@Url.Action("SaveCustomerSdiCode", "FatturazioneElettronicaAdmin", new { area = "Admin" })',
+                type: 'POST',
+                data: {
+                    customerId: customerId,
+                    sdiCode: sdiCode
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $.notify({ message: '@T("Admin.Common.SavedSuccessfully")' }, { type: 'success' });
+                    } else {
+                        $.notify({ message: '@T("Admin.Common.SaveFailed")' }, { type: 'danger' });
+                    }
+                },
+                error: function () {
+                    $.notify({ message: '@T("Admin.Common.SaveFailed")' }, { type: 'danger' });
+                }
+            });
+        });
+    });
+</script>

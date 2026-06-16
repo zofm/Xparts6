@@ -1,6 +1,8 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
+using System.Data;
+using ExcelDataReader;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Smartstore.Core.Catalog.Attributes;
@@ -80,7 +82,7 @@ namespace Smartstore.MotoImporter.Tasks
             // Read the Excel file and group rows by product ID.
             Dictionary<int, List<string>> rowsByProductId;
             using (var stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new ExcelReader(stream, hasHeaders: true, defaultColumnName: "Column"))
+            using (var reader = ExcelReaderFactory.CreateReader(stream))
             {
                 rowsByProductId = ReadMotorbikeRows(reader);
             }
@@ -99,49 +101,85 @@ namespace Smartstore.MotoImporter.Tasks
             file.Delete();
         }
 
-        private static Dictionary<int, List<string>> ReadMotorbikeRows(ExcelReader reader)
+        private Dictionary<int, List<string>> ReadMotorbikeRows(IExcelDataReader reader)
         {
             var result = new Dictionary<int, List<string>>();
+            var rowCount = 0;
+            var skippedCount = 0;
 
-            // Determine column index for "ID".
-            var idColIndex = reader.GetOrdinal("ID");
-
-            while (reader.Read())
+            // Process all sheets
+            do
             {
-                if (reader.FieldCount < 3)
-                    continue;
+                var sheetName = reader.Name;
+                Logger.LogInformation("Processing sheet: {SheetName}", sheetName);
 
-                int productId;
-                if (idColIndex >= 0)
+                var isFirstRow = true;
+
+                while (reader.Read())
                 {
-                    productId = reader.GetValue(idColIndex).Convert<int>();
+                    // Skip header row (first row of each sheet)
+                    if (isFirstRow)
+                    {
+                        isFirstRow = false;
+                        continue;
+                    }
+
+                    rowCount++;
+
+                    if (reader.FieldCount < 5)
+                    {
+                        skippedCount++;
+                        continue;
+                    }
+
+                    // Read all 5 columns
+                    var rawCol0 = reader.GetValue(0);
+                    var rawCol1 = reader.GetValue(1);
+                    var rawCol2 = reader.GetValue(2);
+                    var rawCol3 = reader.GetValue(3);
+                    var rawCol4 = reader.GetValue(4);
+
+                    // Check if ALL values are null (indicates empty row)
+                    if (rawCol0 == null && rawCol1 == null && rawCol2 == null && rawCol3 == null && rawCol4 == null)
+                    {
+                        skippedCount++;
+                        continue;
+                    }
+
+                    int productId = rawCol4.Convert<int>();
+
+                    if (productId <= 0)
+                    {
+                        skippedCount++;
+                        continue;
+                    }
+
+                    var brand = rawCol0.Convert<string>()?.Trim();
+                    var model = rawCol1.Convert<string>()?.Trim();
+                    var year = rawCol2.Convert<string>()?.Trim();
+
+                    var fullName = $"{brand} {model} {year}".Trim();
+                    if (string.IsNullOrWhiteSpace(fullName))
+                    {
+                        skippedCount++;
+                        continue;
+                    }
+
+                    if (!result.TryGetValue(productId, out var names))
+                    {
+                        names = new List<string>();
+                        result[productId] = names;
+                    }
+
+                    if (!names.Contains(fullName, StringComparer.OrdinalIgnoreCase))
+                    {
+                        names.Add(fullName);
+                    }
                 }
-                else
-                {
-                    // Fallback: first column is the ID.
-                    productId = reader.GetValue(0).Convert<int>();
-                }
+            } while (reader.NextResult());
 
-                if (productId <= 0)
-                    continue;
-
-                var brand = reader.GetValue(0).Convert<string>()?.Trim();
-                var model = reader.GetValue(1).Convert<string>()?.Trim();
-                var year = reader.GetValue(2).Convert<string>()?.Trim();
-
-                var fullName = $"{brand} {model} {year}".Trim();
-                if (string.IsNullOrWhiteSpace(fullName))
-                    continue;
-
-                if (!result.TryGetValue(productId, out var names))
-                {
-                    names = new List<string>();
-                    result[productId] = names;
-                }
-
-                if (!names.Contains(fullName, StringComparer.OrdinalIgnoreCase))
-                    names.Add(fullName);
-            }
+            Logger.LogInformation("Imported {Products} unique products with {Total} variants ({Skipped} rows skipped)",
+                result.Count, rowCount, skippedCount);
 
             return result;
         }

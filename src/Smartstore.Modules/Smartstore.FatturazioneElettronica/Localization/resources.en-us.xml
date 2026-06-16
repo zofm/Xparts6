@@ -120,6 +120,17 @@
 		</Children>
 	</LocaleResource>
 
+	<LocaleResource Name="Plugins.SmartStore.FE.Customer" AppendRootKey="false">
+		<Children>
+			<LocaleResource Name="SdiCode">
+				<Value>SdI recipient code</Value>
+			</LocaleResource>
+			<LocaleResource Name="SdiCode.Help">
+				<Value>Enter the recipient code for the Italian System of Exchange (7 alphanumeric characters, e.g., ABCD123). It will be automatically converted to uppercase.</Value>
+			</LocaleResource>
+		</Children>
+	</LocaleResource>
+
 	<LocaleResource Name="Plugins.SmartStore.FE.Box" AppendRootKey="false">
 		<Children>
 			<LocaleResource Name="SdiTitle">

@@ -29,6 +29,18 @@ namespace Smartstore.FatturazioneElettronica
                     .Action("OrderEditTab", "FatturazioneElettronicaAdmin", new { area = "Admin", entityId })
                     .Ajax());
             }
+            else if (message.TabStripName == "customer-edit")
+            {
+                var entityId = ((Smartstore.Web.Modelling.EntityModelBase)message.Model).Id;
+
+                await message.TabFactory.AppendAsync(builder => builder
+                    .Text("SDI Code")
+                    .Name("tab-sdi-code")
+                    .Icon("fa fa-barcode fa-lg fa-fw")
+                    .LinkHtmlAttributes(new { data_tab_name = "SdiCode" })
+                    .Action("CustomerEditTab", "FatturazioneElettronicaAdmin", new { area = "Admin", customerId = entityId })
+                    .Ajax());
+            }
         }
 
         public async Task HandleEventAsync(CustomerRegisteredEvent message)
