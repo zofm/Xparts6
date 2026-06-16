@@ -19,6 +19,11 @@
   - New HTML text optimization command: **Organize**: Improves document structure and cleans up HTML markup.
   - #1445 Create a new image using the Media Manager.
   - Generate image: Quality levels (low, medium, or high) can now be specified, but only if the provider supports this feature.
+- **Required products**
+  - Automatically added required products can no longer be removed separately from the cart.
+  - Required products can now keep their quantity in sync with the main product.
+  - Added a setting to show prices of automatically added required products below the main product price.
+- (DEV) Added `JsonLdBuilder` and `JsonLdFragment` to `Smartstore.Json` — a fluent, fragment-based API for contributing schema.org JSON-LD structured data from views, partials and components
 - #1469 Show password policy and live validation on customer registration.
 - #1141 Enable reward points to be awarded for subscribing to the newsletter.
 - Topics: added an option to disable the narrow prose container and render non-widget topic pages in full width (default remains prose/narrow layout).
@@ -36,6 +41,7 @@
 - #1512 Implement new VAT number status `ServiceUnavailable`.
 - #1507 Add shipping details metadata for search engines to the product detail page.
 - #1516 Overwrite `CatalogSettings.DisplayAllImagesNumber` on product level.
+- (DEV) New `Measure` struct that represents a physical measurement.
 
 ### Improvements
 
@@ -59,11 +65,18 @@
 - #1465 Display the name of the applied discount on order edit page.
 - #1471 Show the customer's email address next to their name on the order edit page.
 - #1466 UI: Edit discount details page should use text-expander (more-less buttons) for "Assigned to xyz" fields.
+- Improved **guest session isolation** to prevent unrelated visitors from being associated with an existing session under certain network conditions. Also hardened the client identification mechanism against edge cases in IPv6
+    environments.
+- **UserAgent YAML** mappings are now always updated from the embedded resource when a newer app version is deployed. A physical `App_Data/useragent.yml` is only used if it is strictly newer than the assembly. For true customizations, place the file at `App_Data/useragent-custom.yml` instead, which always takes highest priority.
 - **Payever**
     - Better checkout flow for Zinia lending payment method
     - Reactivated instant payment by Santander
 - PostFinance/Skrill: Improved the processing of webhook messages.
-- Rebranded payever payment methods. Zinia became Openbank. 
+- Rebranded payever payment methods. Zinia became Openbank.
+- Grouped products: The GTIN has been added as a header field in the list of associated products.
+- **Downloadable products**
+  - Sort downloadable products by order date in descending order in the my-account section.
+  - Show download button for a downloadable product on order detail page.
 
 ### Bugfixes
 
@@ -93,6 +106,10 @@
   - The checkboxes for overriding multistore settings were missing.
 - Take the customer's preferred shipping method into account when updating the shopping cart.
 - Fixed "The value '' is invalid" for category export filter.
+- Pricing: Apply a product discount if a tier price equals the regular price.
+- Export: Occasionally, the email created using a publishing profile would be missing the attachment containing the ZIP archive.
+- #1532 Double encoding of Facebook and Twitter metadata.
+- After an order has been placed, the download of an uploaded checkout attribute file must no longer be marked as transient.
 
 
 ## Smartstore 6.3.0

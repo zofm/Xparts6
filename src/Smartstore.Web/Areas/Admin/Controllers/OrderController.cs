@@ -177,7 +177,7 @@ public class OrderController : AdminController
         var paymentMethodSystemnames = model.PaymentMethods.SplitSafe(',').ToArray();
         var customer = Services.WorkContext.CurrentCustomer;
         var authorizedStoreIds = await Services.StoreMappingService.GetAuthorizedStoreIdsAsync("Customer", customer.Id);
-        
+
         DateTime? startDateUtc = model.StartDate == null
             ? null
             : dtHelper.ConvertToUtcTime(model.StartDate.Value, dtHelper.CurrentTimeZone);
@@ -484,12 +484,12 @@ public class OrderController : AdminController
                                     if (shipment != null)
                                     {
                                         Services.ActivityLogger.LogActivity(KnownActivityLogTypes.EditOrder, T("ActivityLog.EditOrder"), o.GetOrderNumber());
-                                    
+
                                         if (ship && shipment.ShippedDateUtc == null)
                                         {
                                             await _orderProcessingService.ShipAsync(shipment, true);
                                         }
-                                
+
                                         ++numSuccess;
                                         succeededOrderNumbers.Add(o.GetOrderNumber());
                                     }
@@ -1923,7 +1923,7 @@ public class OrderController : AdminController
         model.CustomerName = order.BillingAddress?.GetFullName()?.NullEmpty()
             ?? order.ShippingAddress?.GetFullName()?.NullEmpty()
             ?? order.Customer.FormatUserName(_customerSettings, T, false);
-        model.CustomerEmail = order.Customer?.FindEmail();
+        model.CustomerEmail = order.Customer?.FindEmail() ?? order.BillingAddress?.Email;
         model.CustomerDeleted = order.Customer?.Deleted ?? true;
         model.OrderTotalString = Format(order.OrderTotal);
         model.OrderStatusString = Services.Localization.GetLocalizedEnum(order.OrderStatus);
@@ -1933,6 +1933,11 @@ public class OrderController : AdminController
         model.CreatedOn = Services.DateTimeHelper.ConvertToUserTime(order.CreatedOnUtc, DateTimeKind.Utc);
         model.UpdatedOn = Services.DateTimeHelper.ConvertToUserTime(order.UpdatedOnUtc, DateTimeKind.Utc);
         model.EditUrl = Url.Action(nameof(Edit), "Order", new { id = order.Id });
+
+        if (!model.CustomerDeleted)
+        {
+            model.CustomerEditUrl = Url.Action("Edit", "Customer", new { id = order.CustomerId });
+        }
     }
 
     private async Task PrepareOrderModel(OrderModel model, Order order)

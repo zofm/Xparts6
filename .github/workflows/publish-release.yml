@@ -3,7 +3,7 @@ name: Publish release Docker image
 on:
   push:
     branches:
-      - '6.3.0.x' # << Change this for new versions.
+      - '6.4.0.x' # << Change this for new versions.
   workflow_dispatch:
 
 env:
@@ -61,7 +61,7 @@ jobs:
         docker push ghcr.io/smartstore/smartstore-linux:${{ steps.format-branch-label.outputs.branch-label }}
 
     - name: Publish and Push for Windows
-      if: matrix.os == 'xwindows-latest'
+      if: matrix.os == 'windows-latest'
       run: | 
         dotnet publish src/Smartstore.Web/Smartstore.Web.csproj -c Release -o ./.build/release --no-restore --no-build --no-self-contained
         docker build --build-arg SOURCE=./.build/release -f Nano.Dockerfile -t ghcr.io/smartstore/smartstore-windows:latest -t ghcr.io/smartstore/smartstore-windows:${{ steps.format-branch-label.outputs.branch-label }} .
