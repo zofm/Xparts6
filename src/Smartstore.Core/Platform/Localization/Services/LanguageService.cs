@@ -16,6 +16,7 @@ public class LanguageStub
 public partial class LanguageService : AsyncDbSaveHook<BaseEntity>, ILanguageService
 {
     private const string STORE_LANGUAGE_MAP_KEY = "storelangmap";
+    private const string LANGUAGE_BY_ID_KEY_TEMPLATE = "language:{0}";
 
     private readonly SmartDbContext _db;
     private readonly IStoreContext _storeContext;
@@ -67,6 +68,16 @@ public partial class LanguageService : AsyncDbSaveHook<BaseEntity>, ILanguageSer
 
     public override async Task<HookResult> OnAfterSaveAsync(IHookedEntity entry, CancellationToken cancelToken)
     {
+        if (entry.EntityType == typeof(Language))
+        {
+            var language = entry.Entity as Language;
+            if (language != null)
+            {
+                // Invalidate language cache when it changes
+                await _cache.RemoveAsync(string.Format(LANGUAGE_BY_ID_KEY_TEMPLATE, language.Id));
+            }
+        }
+
         if (entry.EntityType != typeof(Store) && entry.EntityType != typeof(Language))
             return HookResult.Void;
 
@@ -333,6 +344,36 @@ public partial class LanguageService : AsyncDbSaveHook<BaseEntity>, ILanguageSer
         });
 
         return result;
+    }
+
+    #endregion
+
+    #region Get by ID with caching
+
+    public virtual Language GetLanguageById(int languageId)
+    {
+        if (languageId <= 0)
+            return null;
+
+        var cacheKey = string.Format(LANGUAGE_BY_ID_KEY_TEMPLATE, languageId);
+        return _cache.Get(cacheKey, (o) =>
+        {
+            o.ExpiresIn(TimeSpan.FromHours(24));
+            return _db.Languages.Find(languageId);
+        });
+    }
+
+    public virtual async Task<Language> GetLanguageByIdAsync(int languageId)
+    {
+        if (languageId <= 0)
+            return null;
+
+        var cacheKey = string.Format(LANGUAGE_BY_ID_KEY_TEMPLATE, languageId);
+        return await _cache.GetAsync(cacheKey, async (o) =>
+        {
+            o.ExpiresIn(TimeSpan.FromHours(24));
+            return await _db.Languages.FindAsync(languageId);
+        });
     }
 
     #endregion

@@ -1,5 +1,6 @@
 ﻿using Smartstore.Core.Checkout.Orders;
 using Smartstore.Core.Data;
+using Smartstore.Core.Identity;
 using Smartstore.Core.Stores;
 using Smartstore.Data.Hooks;
 using Smartstore.Events;
@@ -15,11 +16,53 @@ public partial class GenericAttributeService : AsyncDbSaveHook<GenericAttribute>
     // Key = (EntityName, EntityId)
     private readonly Dictionary<(string, int), GenericAttributeCollection> _collectionCache = [];
 
+    // Thread-local flag to control caching behavior per request
+    [ThreadStatic]
+    private static bool? _forceDisableCache;
+
     public GenericAttributeService(SmartDbContext db, IStoreContext storeContext, IEventPublisher eventPublisher)
     {
         _db = db;
         _storeContext = storeContext;
         _eventPublisher = eventPublisher;
+    }
+
+    /// <summary>
+    /// Disables caching for GenericAttributes in the current request context.
+    /// Call this method at the beginning of a request for registered users.
+    /// </summary>
+    internal static void DisableCache()
+    {
+        _forceDisableCache = true;
+    }
+
+    /// <summary>
+    /// Enables caching for GenericAttributes in the current request context.
+    /// Call this method at the beginning of a request for guests/bots.
+    /// </summary>
+    internal static void EnableCache()
+    {
+        _forceDisableCache = false;
+    }
+
+    /// <summary>
+    /// Resets the cache control flag (used at the end of request processing).
+    /// </summary>
+    internal static void ResetCacheControl()
+    {
+        _forceDisableCache = null;
+    }
+
+    private bool ShouldUseCache()
+    {
+        // If explicitly controlled, use that value
+        if (_forceDisableCache.HasValue)
+        {
+            return !_forceDisableCache.Value;
+        }
+
+        // Default: use cache
+        return true;
     }
 
     #region Hook
@@ -60,15 +103,24 @@ public partial class GenericAttributeService : AsyncDbSaveHook<GenericAttribute>
             return new GenericAttributeCollection(entityName);
         }
 
+        var useCache = ShouldUseCache();
         var key = (entityName.ToLowerInvariant(), entityId);
 
-        if (!_collectionCache.TryGetValue(key, out var collection))
+        // Try cache only if caching is enabled.
+        if (useCache && _collectionCache.TryGetValue(key, out var collection))
         {
-            var query = from attr in _db.GenericAttributes
-                        where attr.EntityId == entityId && attr.KeyGroup == entityName
-                        select attr;
+            return collection;
+        }
 
-            collection = new GenericAttributeCollection(query, entityName, entityId, _storeContext.CurrentStore.Id);
+        var query = from attr in _db.GenericAttributes
+                    where attr.EntityId == entityId && attr.KeyGroup == entityName
+                    select attr;
+
+        collection = new GenericAttributeCollection(query, entityName, entityId, _storeContext.CurrentStore.Id);
+
+        // Store in cache only if caching is enabled.
+        if (useCache)
+        {
             _collectionCache[key] = collection;
         }
 
@@ -81,6 +133,14 @@ public partial class GenericAttributeService : AsyncDbSaveHook<GenericAttribute>
         Guard.NotNull(entityIds);
 
         if (entityIds.Length == 0)
+        {
+            return;
+        }
+
+        var useCache = ShouldUseCache();
+
+        // If caching is disabled, skip prefetch entirely.
+        if (!useCache)
         {
             return;
         }
