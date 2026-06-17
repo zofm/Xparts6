@@ -40,7 +40,7 @@ namespace Smartstore.PagOnline.Services
         private string VerifyOrderUrl(int orderId)
             => _webHelper.GetStoreLocation() + $"PagOnline/VerifyOrder?id={orderId}";
 
-        public Task<PagOnlineInitResponse> InitAsync(PagOnlinePaymentInitRequest request)
+        public async Task<PagOnlineInitResponse> InitAsync(PagOnlinePaymentInitRequest request)
         {
             var uri = new Uri(_settings.WebServiceUrl);
             var svc = new IgfsCgInit(uri)
@@ -63,48 +63,70 @@ namespace Smartstore.PagOnline.Services
 
             if (!svc.execute() || svc.Error)
             {
-                return Task.FromResult(new PagOnlineInitResponse
+                return new PagOnlineInitResponse
                 {
                     ErrorDescription = svc.ErrorDesc,
                     Rc = svc.Rc
-                });
+                };
             }
 
-            return Task.FromResult(new PagOnlineInitResponse
+            // storing ID for this payment
+            var attrs = _genericAttributeService.GetAttributesForEntity("Order", request.OrderId);
+            attrs.Set(PagOnlineProvider.SystemName + ".PaymentID", svc.PaymentID, request.StoreId);
+            attrs.Set(PagOnlineProvider.SystemName + ".Status", "Init", request.StoreId);
+            await attrs.SaveChangesAsync();
+
+            return new PagOnlineInitResponse
             {
                 Success = true,
                 Rc = svc.Rc,
                 RedirectUrl = svc.RedirectURL?.ToString()
-            });
+            };
         }
 
-        public Task<PagOnlineVerifyResponse> VerifyAsync(PagOnlinePaymentVerifyRequest request)
+        public async Task<PagOnlineVerifyResponse> VerifyAsync(PagOnlinePaymentVerifyRequest request)
         {
+            var attrs = _genericAttributeService.GetAttributesForEntity("Order", request.OrderId);
+            var paymentID = attrs.Get<string>(PagOnlineProvider.SystemName + ".PaymentID", request.StoreId);
+            if (paymentID == null)
+            {
+                return new PagOnlineVerifyResponse
+                {
+                    Success = false,
+                    ErrorDescription = "Payment not found!"
+                };
+            }
+
             var uri = new Uri(_settings.WebServiceUrl);
             var svc = new IgfsCgVerify(uri)
             {
                 Tid = _settings.Tid,
                 KSig = _settings.Ksig,
-                ShopID = FormatOrderId(request.OrderId)
+                ShopID = FormatOrderId(request.OrderId),
+                PaymentID = paymentID
             };
 
             if (!svc.execute() || svc.Error)
             {
-                return Task.FromResult(new PagOnlineVerifyResponse
+                return new PagOnlineVerifyResponse
                 {
                     ErrorDescription = svc.ErrorDesc,
                     Rc = svc.Rc
-                });
+                };
             }
 
-            return Task.FromResult(new PagOnlineVerifyResponse
+            // saving status for this payment
+            attrs.Set(PagOnlineProvider.SystemName + ".Status", "Verified");
+            await attrs.SaveChangesAsync();
+
+            return new PagOnlineVerifyResponse
             {
                 Success = true,
                 Rc = svc.Rc,
                 TranID = svc.TranID.Value,
                 EnrStatus = svc.EnrStatus,
                 AuthStatus = svc.AuthStatus
-            });
+            };
         }
 
         public Task<PagOnlineConfirmResponse> ConfirmAsync(PagOnlinePaymentConfirmRequest request)
