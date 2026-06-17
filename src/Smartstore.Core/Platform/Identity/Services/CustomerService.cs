@@ -1,5 +1,4 @@
-﻿using System.Collections.Concurrent;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -29,12 +28,6 @@ public partial class CustomerService : ICustomerService
     private readonly IChronometer _chronometer;
     private readonly RewardPointsSettings _rewardPointsSettings;
     private readonly PrivacySettings _privacySettings;
-
-    // In-memory cache for guest customers by ClientIdent (TTL = 60 seconds)
-    private static readonly ConcurrentDictionary<string, (Customer customer, DateTime cachedAt)> _guestClientIdentCache = new();
-
-    // In-memory cache for system customers by SystemName (permanent, system accounts don't change)
-    private static readonly ConcurrentDictionary<string, Customer> _systemCustomerCache = new();
 
     private Customer _authCustomer;
     private bool _authCustomerResolved;
@@ -120,22 +113,6 @@ public partial class CustomerService : ICustomerService
                 return null;
             }
 
-            // Try to get from cache first
-            if (_guestClientIdentCache.TryGetValue(clientIdent, out var cached))
-            {
-                var age = (DateTime.UtcNow - cached.cachedAt).TotalSeconds;
-                if (age < maxAgeSeconds)
-                {
-                    // Cache is still valid
-                    return cached.customer;
-                }
-                else
-                {
-                    // Cache expired, remove it
-                    _guestClientIdentCache.TryRemove(clientIdent, out _);
-                }
-            }
-
             var dateFrom = DateTime.UtcNow.AddSeconds(-maxAgeSeconds);
 
             var customer = await _db.Customers
@@ -145,12 +122,6 @@ public partial class CustomerService : ICustomerService
                 // Disabled because of SqlClient "Deadlock" exception (?)
                 //.IncludeShoppingCart()
                 .FirstOrDefaultAsync();
-
-            // Cache the result for next request
-            if (customer != null)
-            {
-                _guestClientIdentCache[clientIdent] = (customer, DateTime.UtcNow);
-            }
 
             return customer;
         }
@@ -375,12 +346,6 @@ public partial class CustomerService : ICustomerService
             return null;
         }
 
-        // Try to get from permanent cache first (system customers never change)
-        if (_systemCustomerCache.TryGetValue(systemName, out var cachedCustomer))
-        {
-            return cachedCustomer;
-        }
-
         var query = _db.Customers
             .IncludeCustomerRoles()
             .ApplyTracking(tracked)
@@ -388,17 +353,9 @@ public partial class CustomerService : ICustomerService
             .Where(x => x.SystemName == systemName)
             .OrderBy(x => x.Id);
 
-        var customer = async
+        return async
             ? await query.FirstOrDefaultAsync()
             : query.FirstOrDefault();
-
-        // Cache system customers permanently (they don't change at runtime)
-        if (customer != null)
-        {
-            _systemCustomerCache[systemName] = customer;
-        }
-
-        return customer;
     }
 
     public virtual async Task<Customer> GetAuthenticatedCustomerAsync()

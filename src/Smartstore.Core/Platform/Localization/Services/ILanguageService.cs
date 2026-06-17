@@ -88,18 +88,4 @@ public partial interface ILanguageService
     /// <param name="storeId">The store id</param>
     /// <returns>The language id</returns>
     Task<int> GetMasterLanguageIdAsync(int storeId = 0);
-
-    /// <summary>
-    /// Gets a language by its id with caching.
-    /// </summary>
-    /// <param name="languageId">The language id</param>
-    /// <returns>The language or null if not found</returns>
-    Language GetLanguageById(int languageId);
-
-    /// <summary>
-    /// Gets a language by its id with caching.
-    /// </summary>
-    /// <param name="languageId">The language id</param>
-    /// <returns>The language or null if not found</returns>
-    Task<Language> GetLanguageByIdAsync(int languageId);
 }

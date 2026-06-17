@@ -124,8 +124,6 @@ public class LanguageResolver : ILanguageResolver
             customerLangId = _languageService.GetMasterLanguageId(storeId);
         }
 
-        return async 
-            ? await _languageService.GetLanguageByIdAsync(customerLangId) 
-            : _languageService.GetLanguageById(customerLangId);
+        return async ? await _db.Languages.FindByIdAsync(customerLangId) : _db.Languages.FindById(customerLangId);
     }
 }

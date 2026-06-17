@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Smartstore.Core.Checkout.Tax;
 using Smartstore.Core.Common;
-using Smartstore.Core.Common.Services;
 using Smartstore.Core.Data;
 using Smartstore.Core.Identity;
 using Smartstore.Core.Localization;
@@ -46,21 +45,6 @@ public partial class DefaultWorkContext : IWorkContext
         if (_customer == null)
         {
             (_customer, _impersonator) = await _source.ResolveCurrentCustomerAsync();
-
-            // Configure GenericAttributeService caching based on customer type.
-            // Cache is enabled only for guests and bots.
-            // Registered users always read from database.
-            if (_customer != null)
-            {
-                if (_customer.IsGuest() || _customer.SystemName == SystemCustomerNames.Bot)
-                {
-                    GenericAttributeService.EnableCache();
-                }
-                else
-                {
-                    GenericAttributeService.DisableCache();
-                }
-            }
         }
 
         if (_language == null)
