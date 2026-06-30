@@ -577,12 +577,19 @@ namespace Smartstore.FatturazioneElettronica.Services
             => _db.FEInvoices().AsNoTracking().FirstOrDefault(x => x.OrderId == orderId);
 
         public int GetLastInvoiceNumber(int year)
-            => _db.FEInvoices()
+        { 
+            var n = _db.FEInvoices()
                 .OrderByDescending(x => x.Year)
                 .ThenByDescending(x => x.Number)
                 .Where(x => x.Year == year)
                 .Select(x => x.Number)
                 .FirstOrDefault();
+
+            if (n < 331 && year == 2026)
+                n = 331; // fix per fatture fatte offline durante problematiche sito
+
+            return n;
+        }
 
         public void CreateInvoice(int orderId, int? exemptionId, string causal)
         {
